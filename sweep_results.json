@@ -1,0 +1,112 @@
+[
+  {
+    "name": "L0 anchor (Piso)",
+    "draw_rate": 0.0,
+    "decisiveness": 1.0,
+    "p1_winrate": 0.58,
+    "mean_plies": 90.74,
+    "mean_branching": 38.11964971230208,
+    "opening_entropy": 0.9616197564844527,
+    "distinct_openings": 30
+  },
+  {
+    "name": "L1 Seneca (freeing)",
+    "draw_rate": 0.0,
+    "decisiveness": 1.0,
+    "p1_winrate": 0.42,
+    "mean_plies": 101.54,
+    "mean_branching": 37.47616732810416,
+    "opening_entropy": 0.9542594364732919,
+    "distinct_openings": 33
+  },
+  {
+    "name": "L2 step move",
+    "draw_rate": 0.08,
+    "decisiveness": 0.92,
+    "p1_winrate": 0.6521739130434783,
+    "mean_plies": 128.4,
+    "mean_branching": 18.1923933639521,
+    "opening_entropy": 0.9436598208767172,
+    "distinct_openings": 30
+  },
+  {
+    "name": "L3 corners safe",
+    "draw_rate": 0.0,
+    "decisiveness": 1.0,
+    "p1_winrate": 0.58,
+    "mean_plies": 90.74,
+    "mean_branching": 38.11964971230208,
+    "opening_entropy": 0.9616197564844527,
+    "distinct_openings": 30
+  },
+  {
+    "name": "L4 annihilate only",
+    "draw_rate": 0.0,
+    "decisiveness": 1.0,
+    "p1_winrate": 0.58,
+    "mean_plies": 90.74,
+    "mean_branching": 38.11964971230208,
+    "opening_entropy": 0.9616197564844527,
+    "distinct_openings": 30
+  },
+  {
+    "name": "L5 7x8 board",
+    "draw_rate": 0.0,
+    "decisiveness": 1.0,
+    "p1_winrate": 0.54,
+    "mean_plies": 80.98,
+    "mean_branching": 33.09417812357456,
+    "opening_entropy": 0.9587306641508201,
+    "distinct_openings": 36
+  },
+  {
+    "name": "P0 anchor (blockade)",
+    "draw_rate": 0.02,
+    "decisiveness": 0.98,
+    "p1_winrate": 0.4897959183673469,
+    "mean_plies": 118.68,
+    "mean_branching": 47.114199501246645,
+    "opening_entropy": 0.8169702368364665,
+    "distinct_openings": 6
+  },
+  {
+    "name": "P1 both win-conds",
+    "draw_rate": 0.02,
+    "decisiveness": 0.98,
+    "p1_winrate": 0.5102040816326531,
+    "mean_plies": 102.5,
+    "mean_branching": 49.160484657854916,
+    "opening_entropy": 0.8932525434887907,
+    "distinct_openings": 5
+  },
+  {
+    "name": "P2 step move",
+    "draw_rate": 1.0,
+    "decisiveness": 0.0,
+    "p1_winrate": NaN,
+    "mean_plies": 200.0,
+    "mean_branching": 18.1476,
+    "opening_entropy": 0.620572308161015,
+    "distinct_openings": 5
+  },
+  {
+    "name": "P3 placement setup",
+    "draw_rate": 0.02,
+    "decisiveness": 0.98,
+    "p1_winrate": 0.6326530612244898,
+    "mean_plies": 103.78,
+    "mean_branching": 36.76252423024266,
+    "opening_entropy": 0.9607437514760527,
+    "distinct_openings": 33
+  },
+  {
+    "name": "P4 9x9 board",
+    "draw_rate": 0.0,
+    "decisiveness": 1.0,
+    "p1_winrate": 0.8,
+    "mean_plies": 117.12,
+    "mean_branching": 61.403077394169465,
+    "opening_entropy": 0.14144054254182067,
+    "distinct_openings": 2
+  }
+]

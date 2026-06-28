@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pessoi — the game of Homer's counters, reconstructed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --limestone:#b3a991;      /* page / conservator surface */
+    --limestone-d:#a59a80;
+    --slab:#4c5044;           /* incised stone board       */
+    --slab-cell:#545848;
+    --slab-cell-d:#474b3c;
+    --incise:#24271d;         /* engraved grid line shadow */
+    --incise-hi:#6b6f5d;      /* carved top edge           */
+    --ink:#2c2719;            /* text on limestone         */
+    --ink-soft:#5d5440;
+    --pale:#e9dfc6;           /* on dark                   */
+    --verdigris:#5d9180;      /* bronze patina accent      */
+    --verdigris-d:#467263;
+    --obsidian:#1d2728;       /* army A: black glass       */
+    --obsidian-hi:#3c5a59;
+    --bone:#e7ddc4;           /* army B: alabaster         */
+    --bone-sh:#b6ab8c;
+    --card:#c4bba4;
+    --line:#8d836b;
+    --danger:#9a5a3c;
+    --radius:3px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--limestone);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(255,255,255,.05), transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(0,0,0,.06), transparent 45%);
+    line-height:1.45;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(18px,4vw,40px)}
+  header.masthead{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;
+    border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:24px}
+  .title{font-family:"Fraunces",serif;font-weight:600;
+    font-size:clamp(34px,6vw,58px);letter-spacing:.01em;line-height:.95;margin:0}
+  .title .sub{display:block;font-family:"IBM Plex Mono",monospace;
+    font-weight:400;font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink-soft);margin-top:10px}
+  .tradition-tabs{margin-left:auto;display:flex;gap:0;border:1px solid var(--line);
+    border-radius:var(--radius);overflow:hidden;align-self:center}
+  .tradition-tabs button{font:500 13px/1 "IBM Plex Sans";letter-spacing:.04em;
+    padding:9px 15px;background:transparent;border:0;color:var(--ink-soft);
+    cursor:pointer}
+  .tradition-tabs button[aria-pressed="true"]{background:var(--slab);color:var(--pale)}
+
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:30px;align-items:start}
+  @media(max-width:780px){.layout{grid-template-columns:1fr}}
+
+  /* ---- board ---- */
+  .board-stage{display:flex;flex-direction:column;gap:10px}
+  .slab{
+    --n:8;
+    aspect-ratio:1/1;width:100%;
+    background:linear-gradient(150deg,var(--slab),#434738);
+    border-radius:5px;padding:clamp(8px,2vw,16px);
+    box-shadow:0 2px 0 #3a3e30, 0 18px 40px -22px rgba(0,0,0,.6),
+      inset 0 1px 0 rgba(255,255,255,.06);
+    position:relative;
+  }
+  .grid{width:100%;height:100%;display:grid;
+    grid-template-columns:repeat(var(--n),1fr);grid-template-rows:repeat(var(--n),1fr);
+    gap:0;border:1px solid var(--incise);border-radius:2px;overflow:hidden}
+  .cell{position:relative;border-right:1px solid var(--incise);
+    border-bottom:1px solid var(--incise);background:var(--slab-cell);
+    box-shadow:inset 1px 1px 0 rgba(255,255,255,.04);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    padding:0;outline:0;transition:background .12s}
+  .cell:nth-child(odd){background:var(--slab-cell-d)}
+  .cell:hover{background:#5a5e4d}
+  .cell:focus-visible{box-shadow:inset 0 0 0 2px var(--verdigris)}
+  .cell.legal::after{content:"";width:26%;height:26%;border-radius:50%;
+    background:radial-gradient(var(--verdigris),var(--verdigris-d));
+    opacity:.8;box-shadow:0 0 8px -1px var(--verdigris)}
+  .cell.selected{box-shadow:inset 0 0 0 2px var(--verdigris),
+    inset 0 0 14px -2px var(--verdigris)}
+  .cell.lastmove{background:#5c604c}
+
+  /* counters: glass + bone with concentric-circle decoration */
+  .piece{width:78%;height:78%;border-radius:50%;position:relative;
+    transition:transform .16s ease, opacity .2s ease;
+    animation:settle .22s ease both}
+  @keyframes settle{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+  .piece.a{
+    background:
+      radial-gradient(circle at 36% 30%, var(--obsidian-hi), transparent 38%),
+      radial-gradient(circle at 50% 55%, #243131, var(--obsidian) 70%);
+    box-shadow:0 3px 6px -2px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.06);}
+  .piece.b{
+    background:
+      radial-gradient(circle at 36% 30%, #fff8e7, transparent 42%),
+      radial-gradient(circle at 50% 60%, var(--bone), var(--bone-sh) 78%);
+    box-shadow:0 3px 6px -2px rgba(0,0,0,.4), inset 0 0 0 1px rgba(0,0,0,.06);}
+  .piece::before,.piece::after{content:"";position:absolute;border-radius:50%;
+    inset:18%;border:1px solid currentColor;opacity:.22}
+  .piece::after{inset:36%}
+  .piece.a{color:#bfe3dd}.piece.b{color:#7a6f4f}
+  .piece.incitus{opacity:.42;filter:grayscale(.5);transform:scale(.86)}
+  .piece.incitus::before{border-style:dashed;opacity:.5}
+  .coord{position:absolute;font:500 9px/1 "IBM Plex Mono";color:#9aa088;
+    opacity:.5;top:2px;left:3px;pointer-events:none}
+
+  .object-label{font-family:"IBM Plex Mono",monospace;font-size:11px;
+    letter-spacing:.04em;color:var(--ink-soft);display:flex;justify-content:space-between;
+    gap:10px;border-top:1px solid var(--line);padding-top:8px}
+
+  /* ---- catalogue panel ---- */
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 18px 20px;box-shadow:0 12px 30px -24px rgba(0,0,0,.5)}
+  .phase{font-family:"Fraunces",serif;font-size:21px;font-weight:600;margin:0 0 2px}
+  .phase-note{font-size:12px;color:var(--ink-soft);margin:0 0 14px;min-height:32px}
+  .turn{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px;
+    padding:9px 11px;border-radius:var(--radius);background:rgba(0,0,0,.05);margin-bottom:14px}
+  .dot{width:15px;height:15px;border-radius:50%;flex:0 0 auto;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
+  .dot.a{background:radial-gradient(circle at 40% 35%,#3c5a59,var(--obsidian))}
+  .dot.b{background:radial-gradient(circle at 40% 35%,#fff8e7,var(--bone-sh))}
+  .tallies{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+  .tally{background:rgba(0,0,0,.05);border-radius:var(--radius);padding:8px 10px}
+  .tally .n{font-family:"Fraunces",serif;font-size:26px;font-weight:600;line-height:1}
+  .tally .k{font:400 10px/1.3 "IBM Plex Mono";letter-spacing:.08em;
+    text-transform:uppercase;color:var(--ink-soft)}
+
+  .group{border-top:1px solid var(--line);padding-top:13px;margin-top:4px}
+  .group > .legend{font:500 10px/1 "IBM Plex Mono";letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink-soft);margin-bottom:9px}
+  .seg{display:flex;border:1px solid var(--line);border-radius:var(--radius);
+    overflow:hidden;margin-bottom:9px}
+  .seg button{flex:1;font:500 12px/1 "IBM Plex Sans";padding:8px 4px;border:0;
+    background:transparent;color:var(--ink-soft);cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--slab);color:var(--pale)}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:8px;
+    font-size:13px;padding:5px 0}
+  .row label{cursor:pointer}
+  .src{font:400 10px/1 "IBM Plex Mono";color:var(--verdigris-d);letter-spacing:.02em}
+  /* toggle */
+  .sw{position:relative;width:38px;height:21px;flex:0 0 auto;cursor:pointer}
+  .sw input{opacity:0;width:0;height:0;position:absolute}
+  .sw span{position:absolute;inset:0;background:var(--limestone-d);border-radius:21px;
+    transition:.16s;box-shadow:inset 0 0 0 1px var(--line)}
+  .sw span::before{content:"";position:absolute;width:15px;height:15px;left:3px;top:3px;
+    background:#f0ead8;border-radius:50%;transition:.16s}
+  .sw input:checked + span{background:var(--verdigris)}
+  .sw input:checked + span::before{transform:translateX(17px)}
+  .sw input:focus-visible + span{box-shadow:0 0 0 2px var(--verdigris)}
+
+  .actions{display:flex;gap:8px;margin-top:16px}
+  .btn{flex:1;font:600 13px/1 "IBM Plex Sans";padding:11px;border-radius:var(--radius);
+    border:1px solid var(--verdigris-d);background:var(--verdigris);color:#0f1b18;
+    cursor:pointer;letter-spacing:.02em}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+  .btn:hover{filter:brightness(1.05)}
+
+  .status{margin-top:14px;font-size:12.5px;color:var(--ink-soft);min-height:20px;
+    border-left:2px solid var(--verdigris);padding-left:10px}
+  .status.win{color:var(--ink);font-weight:600;border-color:var(--danger)}
+  .sources-note{margin-top:18px;font:400 10.5px/1.5 "IBM Plex Mono";
+    color:var(--ink-soft);border-top:1px solid var(--line);padding-top:12px}
+  .sources-note b{color:var(--ink)}
+  .epigraph{margin:12px 0 0;max-width:46ch;font:400 16px/1.55 "Fraunces",Georgia,serif;
+    font-style:italic;color:var(--ink);letter-spacing:.01em}
+  .epigraph .gloss{display:block;font:400 10.5px/1.6 "IBM Plex Mono";font-style:normal;
+    color:var(--ink-soft);margin-top:4px;letter-spacing:0}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <h1 class="title">Pessoi<span class="sub">the game of Homer's counters, reconstructed · v0.3</span></h1>
+    <p class="epigraph" lang="grc">πεσσοῖσι προπάροιθε θυράων θυμὸν ἔτερπον<span class="gloss">“… at <i>pessoi</i>, before the gates, they delighted their hearts.” — Homer, <span style="font-style:italic">Odyssey</span> 1.107 (the suitors, the game's oldest witness)</span></p>
+    <div class="tradition-tabs" role="group" aria-label="Tradition">
+      <button id="tab-greek"  aria-pressed="true">Petteia · the Greek game</button>
+      <button id="tab-roman"  aria-pressed="false">Latrunculi · Roman reception</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <section class="board-stage">
+      <div class="slab"><div class="grid" id="grid"></div></div>
+      <div class="object-label">
+        <span id="lbl-left">incised board · 7 × 7</span>
+        <span id="lbl-right">after the Corbridge type</span>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <p class="phase" id="phase">Distributio</p>
+      <p class="phase-note" id="phase-note">Place your wandering pieces on any empty cell. The <i>vagi</i> cannot be taken while being set down.</p>
+
+      <div class="turn"><span class="dot a" id="turn-dot"></span><span id="turn-text">Obsidian to place</span></div>
+
+      <div class="tallies">
+        <div class="tally"><div class="n" id="ta">0</div><div class="k">obsidian taken</div></div>
+        <div class="tally"><div class="n" id="tb">0</div><div class="k">bone taken</div></div>
+      </div>
+
+      <div class="group">
+        <div class="legend">Opening</div>
+        <div class="seg" id="seg-setup" role="group" aria-label="Setup">
+          <button data-v="placement" aria-pressed="true">Placement</button>
+          <button data-v="array" aria-pressed="false">Opposed rows</button>
+        </div>
+        <div class="seg" id="seg-move" role="group" aria-label="Movement">
+          <button data-v="slide" aria-pressed="true">Slide</button>
+          <button data-v="step" aria-pressed="false">One step</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="legend">Capture & end</div>
+        <div class="row">
+          <label for="sw-corner">Corner capture <span class="src">Schädler</span></label>
+          <span class="sw"><input type="checkbox" id="sw-corner" checked><span></span></span>
+        </div>
+        <div class="row">
+          <label for="sw-free">Freeing the <i>incitus</i> <span class="src">Seneca</span></label>
+          <span class="sw"><input type="checkbox" id="sw-free"><span></span></span>
+        </div>
+        <div class="seg" id="seg-vic" role="group" aria-label="Victory">
+          <button data-v="both" aria-pressed="false">Either</button>
+          <button data-v="annihilate" aria-pressed="false">Capture</button>
+          <button data-v="blockade" aria-pressed="true">Blockade</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="legend">Table</div>
+        <div class="seg" id="seg-size" role="group" aria-label="Board size">
+          <button data-v="7" aria-pressed="true">7×7</button>
+          <button data-v="8" aria-pressed="false">8×8</button>
+          <button data-v="9" aria-pressed="false">9×9</button>
+        </div>
+        <div class="seg" id="seg-opp" role="group" aria-label="Opponent">
+          <button data-v="human" aria-pressed="true">Two players</button>
+          <button data-v="house" aria-pressed="false">vs the House</button>
+        </div>
+        <div id="house-opts" style="display:none">
+          <div class="legend" style="margin-top:.6rem">The House plays Pale</div>
+          <div class="seg" id="seg-level" role="group" aria-label="House difficulty">
+            <button data-v="random"  aria-pressed="false">Novice</button>
+            <button data-v="greedy"  aria-pressed="false">Raider</button>
+            <button data-v="search2" aria-pressed="true">Adept</button>
+            <button data-v="search3" aria-pressed="false">Master</button>
+          </div>
+          <div class="seg" id="seg-style" role="group" aria-label="House style">
+            <button data-v="aggressive" aria-pressed="true">Aggressive</button>
+            <button data-v="positional" aria-pressed="false">Positional</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="new">New game</button>
+        <button class="btn ghost" id="pass" title="Skip a forced-pass position">Pass</button>
+      </div>
+      <p class="status" id="status">Set the rules, then place your first piece.</p>
+
+      <p class="sources-note" id="srcnote"></p>
+    </aside>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ------------------------------------------------------------------ *
+ *  Engine — a faithful JS port of latrones.py (validated by tests).  *
+ * ------------------------------------------------------------------ */
+const ORTHO=[[1,0],[-1,0],[0,1],[0,-1]];
+
+const Rules = {
+  tradition:"greek", W:7, H:7, pieces:12,
+  setup:"placement", movement:"slide",
+  corner:true, freeing:false, antiShuffle:true,
+  victory:"blockade", capRule:"material", minPieces:1, moveCap:400, opponent:"human",
+  houseLevel:"search2", houseStyle:"aggressive",
+};
+
+function makeGame(r){
+  const g={r, W:r.W, H:r.H, board:new Array(r.W*r.H).fill(0),
+    frozen:new Map(), toMove:1, ply:0, movePlies:0,
+    lastMove:{1:null,2:null}, toPlace:{1:0,2:0}, phase:1,
+    result:null, selected:null};
+  if(r.setup==="placement"){g.phase=0;g.toPlace={1:r.pieces,2:r.pieces};}
+  else fillArray(g);
+  return g;
+}
+const I=(g,x,y)=>y*g.W+x, XY=(g,i)=>[i%g.W,(i/g.W)|0],
+      ON=(g,x,y)=>x>=0&&x<g.W&&y>=0&&y<g.H,
+      count=(g,p)=>g.board.reduce((s,v)=>s+(v===p?1:0),0);
+
+function fillArray(g){
+  const n=g.r.pieces; let p1=[],p2=[];
+  for(let y=0;y<g.H&&p1.length<n;y++)for(let x=0;x<g.W&&p1.length<n;x++)p1.push(I(g,x,y));
+  for(let y=g.H-1;y>=0&&p2.length<n;y--)for(let x=g.W-1;x>=0&&p2.length<n;x--)p2.push(I(g,x,y));
+  p1.forEach(i=>g.board[i]=1); p2.forEach(i=>g.board[i]=2);
+}
+
+function legalMoves(g){
+  const p=g.toMove;
+  if(g.phase===0){const out=[];for(let i=0;i<g.board.length;i++)if(g.board[i]===0)out.push(["place",i]);return out;}
+  let forbidden=null;
+  if(g.r.antiShuffle&&g.lastMove[p]){const[f,t]=g.lastMove[p];forbidden=t+","+f;}
+  const moves=[];
+  for(let i=0;i<g.board.length;i++){
+    if(g.board[i]!==p||g.frozen.has(i))continue;
+    const[x,y]=XY(g,i);
+    for(const[dx,dy]of ORTHO){
+      if(g.r.movement==="step"){
+        const nx=x+dx,ny=y+dy;
+        if(ON(g,nx,ny)&&g.board[I(g,nx,ny)]===0)add(moves,i,I(g,nx,ny),forbidden);
+      }else{
+        let nx=x+dx,ny=y+dy;
+        while(ON(g,nx,ny)){const j=I(g,nx,ny);if(g.board[j]===0)add(moves,i,j,forbidden);else break;nx+=dx;ny+=dy;}
+      }
+    }
+  }
+  return moves;
+}
+function add(moves,f,t,forbidden){if(forbidden&&forbidden===f+","+t)return;moves.push(["move",f,t]);}
+
+const corners=g=>[I(g,0,0),I(g,g.W-1,0),I(g,0,g.H-1),I(g,g.W-1,g.H-1)];
+const isFlanker=(g,c,p)=>g.board[c]===p&&!g.frozen.has(c);
+
+function captureFrom(g,to,p){
+  const foe=3-p,[x,y]=XY(g,to),cap=[];
+  for(const[dx,dy]of ORTHO){
+    const ex=x+dx,ey=y+dy,bx=x+2*dx,by=y+2*dy;
+    if(ON(g,ex,ey)&&ON(g,bx,by)){
+      const e=I(g,ex,ey),b=I(g,bx,by);
+      if(g.board[e]===foe&&isFlanker(g,b,p))cap.push(e);
+    }
+  }
+  if(g.r.corner){
+    for(const c of corners(g)){
+      if(g.board[c]===foe){
+        const[cx,cy]=XY(g,c);
+        const nb=ORTHO.map(([dx,dy])=>[cx+dx,cy+dy]).filter(([a,b])=>ON(g,a,b)).map(([a,b])=>I(g,a,b));
+        if(nb.length===2&&nb.every(n=>isFlanker(g,n,p))&&nb.includes(to))cap.push(c);
+      }
+    }
+  }
+  for(const e of cap){ if(g.r.freeing)g.frozen.set(e,p); else g.board[e]=0; }
+  return cap.length;
+}
+
+function resolveFrozen(g,p){
+  for(const[cell,cap]of[...g.frozen]){
+    if(cap!==p)continue;
+    const[cx,cy]=XY(g,cell); let trapped=false;
+    for(const[dx,dy]of[[1,0],[0,1]]){
+      const ax=cx+dx,ay=cy+dy,bx=cx-dx,by=cy-dy;
+      if(ON(g,ax,ay)&&ON(g,bx,by)&&isFlanker(g,I(g,ax,ay),p)&&isFlanker(g,I(g,bx,by),p))trapped=true;
+    }
+    if(!trapped&&corners(g).includes(cell)){
+      const nb=ORTHO.map(([dx,dy])=>[cx+dx,cy+dy]).filter(([a,b])=>ON(g,a,b)).map(([a,b])=>I(g,a,b));
+      if(g.r.corner&&nb.length===2&&nb.every(n=>isFlanker(g,n,p)))trapped=true;
+    }
+    if(trapped)g.board[cell]=0;        // remove the incitus
+    g.frozen.delete(cell);             // else released back to play
+  }
+}
+
+function applyAction(g,a){
+  const p=g.toMove;
+  if(g.r.freeing)resolveFrozen(g,p);
+  if(a[0]==="place"){
+    g.board[a[1]]=p; g.toPlace[p]--;
+    if(g.toPlace[1]===0&&g.toPlace[2]===0)g.phase=1;
+  }else{
+    const[,f,t]=a; g.board[f]=0; g.board[t]=p; g.lastMove[p]=[f,t];
+    captureFrom(g,t,p); g.movePlies++;
+  }
+  g.ply++; g.toMove=3-p; checkEnd(g); return g.result;
+}
+
+function checkEnd(g){
+  if(g.movePlies>=g.r.moveCap){
+    if(g.r.capRule==="material"){const c1=count(g,1),c2=count(g,2);g.result=c1>c2?1:(c2>c1?2:0);}
+    else g.result=0;
+    return;
+  }
+  if(g.phase===0)return;
+  const c1=count(g,1),c2=count(g,2),v=g.r.victory;
+  if(v==="annihilate"||v==="both"){
+    if(c2<=g.r.minPieces){g.result=1;return;}
+    if(c1<=g.r.minPieces){g.result=2;return;}
+  }
+  if(legalMoves(g).length===0){
+    g.result=(v==="blockade"||v==="both")?3-g.toMove:0;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ *  The House — a difficulty ladder + two playing styles (#7).         *
+ *  Novice (random) · Raider (1-ply greedy) · Adept (depth-2) ·        *
+ *  Master (depth-3). The two search tiers take a STYLE: "aggressive"  *
+ *  (material + threat — bloody, fun) or "positional" (mobility-denial *
+ *  + support — patient, encircling, the blockade-aware eval). The     *
+ *  research/analyst bot is the Python engine; this is the sparring    *
+ *  bot — tunable and fast, with a node budget so the board stays      *
+ *  responsive.                                                        *
+ * ------------------------------------------------------------------ */
+const WINV=1e6;
+const PERSONA={
+  // aggressive ≈ search.py material-first, with extra threat to seek captures
+  aggressive:{mat:100, mob:1,  mobdeny:0, ownlib:0, support:0, vuln:8, threat:12, centre:0.15},
+  // positional ≈ search_v2 blockade-aware: deny foe liberty, build support
+  positional:{mat:20,  mob:0,  mobdeny:4, ownlib:1, support:2, vuln:8, threat:6,  centre:0.15},
+};
+
+function cloneGame(g){
+  return {r:g.r,W:g.W,H:g.H,board:g.board.slice(),frozen:new Map(g.frozen),
+    toMove:g.toMove,ply:g.ply,movePlies:g.movePlies,
+    lastMove:{1:g.lastMove[1],2:g.lastMove[2]},
+    toPlace:{1:g.toPlace[1],2:g.toPlace[2]},
+    phase:g.phase,result:g.result,selected:null};
+}
+
+/* one-scan feature evaluation from `side`'s perspective */
+function evaluate(g,side,W){
+  const b=g.board, foe=3-side, Wd=g.W, Hd=g.H, cx=(Wd-1)/2, cy=(Hd-1)/2;
+  let mat=0, ownMobBin=0, foeMobBin=0, foeLib=0, ownLib=0,
+      support=0, vuln=0, threat=0, centre=0;
+  for(let i=0;i<b.length;i++){
+    const v=b[i]; if(!v)continue;
+    const x=i%Wd, y=(i/Wd)|0;
+    let emptyN=0, friendN=0;
+    for(const[dx,dy]of ORTHO){const nx=x+dx,ny=y+dy;
+      if(nx>=0&&nx<Wd&&ny>=0&&ny<Hd){const j=ny*Wd+nx;
+        if(b[j]===0)emptyN++; else if(b[j]===v)friendN++;}}
+    const want=v===side?foe:side; let hb=false;
+    for(const[dx,dy]of[[1,0],[0,1]]){
+      const ax=x+dx,ay=y+dy,bx=x-dx,by=y-dy;
+      if(ax>=0&&ax<Wd&&ay>=0&&ay<Hd&&bx>=0&&bx<Wd&&by>=0&&by<Hd){
+        const A=b[ay*Wd+ax],B=b[by*Wd+bx];
+        if((A===want&&B===0)||(B===want&&A===0)){hb=true;break;}}
+    }
+    const dist=Math.abs(x-cx)+Math.abs(y-cy);
+    if(v===side){mat++; if(emptyN>0)ownMobBin++; ownLib+=emptyN;
+      support+=friendN>0?1:-1; if(hb)vuln++; centre-=dist;}
+    else{mat--; if(emptyN>0)foeMobBin++; foeLib+=emptyN;
+      support-=friendN>0?1:-1; if(hb)threat++; centre+=dist;}
+  }
+  return W.mat*mat + W.mob*(ownMobBin-foeMobBin) - W.mobdeny*foeLib
+       + W.ownlib*ownLib + W.support*support - W.vuln*vuln
+       + W.threat*threat + W.centre*centre;
+}
+
+function captureCount(g,f,t,p){
+  const b=g.board, of=b[f], ot=b[t]; b[f]=0; b[t]=p;
+  let c=0; const foe=3-p,[x,y]=XY(g,t);
+  for(const[dx,dy]of ORTHO){const ex=x+dx,ey=y+dy,bx=x+2*dx,by=y+2*dy;
+    if(ON(g,ex,ey)&&ON(g,bx,by)&&b[I(g,ex,ey)]===foe&&isFlanker(g,I(g,bx,by),p))c++;}
+  b[f]=of; b[t]=ot; return c;
+}
+const orderMoves=(g,moves)=>{const p=g.toMove;
+  return moves.slice().sort((a,b)=>
+    (b[0]==="move"?captureCount(g,b[1],b[2],p):0)-
+    (a[0]==="move"?captureCount(g,a[1],a[2],p):0));};
+
+function negamax(g,depth,alpha,beta,W,budget){
+  if(g.result!==null)return g.result===0?0:(g.result===g.toMove?WINV:-WINV);
+  if(depth===0||budget.n>budget.cap)return evaluate(g,g.toMove,W);
+  const moves=legalMoves(g); if(!moves.length)return -WINV;
+  let best=-1e18;
+  for(const m of orderMoves(g,moves)){
+    budget.n++;
+    const c=cloneGame(g); applyAction(c,m);
+    const val=-negamax(c,depth-1,-beta,-alpha,W,budget);
+    if(val>best)best=val;
+    if(best>alpha)alpha=best;
+    if(alpha>=beta)break;
+  }
+  return best;
+}
+
+function placeHeuristic(g){            // central-cluster opening (cheap)
+  const cx=(g.W-1)/2, cy=(g.H-1)/2; let best=[],bs=1e18;
+  for(const m of legalMoves(g)){const[x,y]=XY(g,m[1]);
+    const d=Math.abs(x-cx)+Math.abs(y-cy);
+    if(d<bs){bs=d;best=[m];}else if(d===bs)best.push(m);}
+  return best[(Math.random()*best.length)|0];
+}
+
+function searchMove(g,depth,W){
+  if(g.phase===0)return placeHeuristic(g);
+  const moves=legalMoves(g); if(!moves.length)return null;
+  const budget={n:0,cap:24000}; let best=[],bv=-1e18;
+  for(const m of orderMoves(g,moves)){
+    const c=cloneGame(g); applyAction(c,m);
+    const val=-negamax(c,depth-1,-1e18,1e18,W,budget);
+    if(val>bv+1e-9){bv=val;best=[m];}else if(Math.abs(val-bv)<=1e-9)best.push(m);
+  }
+  return best[(Math.random()*best.length)|0];
+}
+
+/* Raider — 1-ply greedy (captures, else toward centre). The original House. */
+function greedyMove(g){
+  const moves=legalMoves(g); if(!moves.length)return null;
+  const cx=(g.W-1)/2, cy=(g.H-1)/2; let best=[],bs=-1e9;
+  for(const m of moves){
+    let s;
+    if(m[0]==="place"){const[x,y]=XY(g,m[1]);s=-(Math.abs(x-cx)+Math.abs(y-cy))*0.1;}
+    else{const[x,y]=XY(g,m[2]);
+      s=10*captureCount(g,m[1],m[2],g.toMove)-(Math.abs(x-cx)+Math.abs(y-cy))*0.05;}
+    if(s>bs){bs=s;best=[m];}else if(s===bs)best.push(m);
+  }
+  return best[(Math.random()*best.length)|0];
+}
+
+function houseMove(g){
+  const lvl=g.r.houseLevel||"search2";
+  const W=PERSONA[g.r.houseStyle]||PERSONA.aggressive;
+  if(lvl==="random"){const m=legalMoves(g);return m.length?m[(Math.random()*m.length)|0]:null;}
+  if(lvl==="greedy")return greedyMove(g);
+  if(lvl==="search3")return searchMove(g,3,W);
+  return searchMove(g,2,W);            // search2 / default
+}
+
+/* ------------------------------------------------------------------ *
+ *  UI                                                                 *
+ * ------------------------------------------------------------------ */
+let g=makeGame({...Rules});
+const $=id=>document.getElementById(id);
+const grid=$("grid");
+
+const LABELS={
+  roman:{
+    placeName:"Distributio", placeNote:"Place your wandering pieces on any empty cell. The <i>vagi</i> cannot be taken while being set down.",
+    moveName:"Manus", moveNote:"The <i>ordinarii</i> manoeuvre. Trap an enemy between two of your own to take it.",
+    a:"Obsidian", b:"Bone", caption:"after the Corbridge type"
+  },
+  greek:{
+    placeName:"Thesis", placeNote:"Set your dogs (<i>kynes</i>) on the city. Nothing is taken during the setting-down.",
+    moveName:"Kinesis", moveNote:"Move the dogs. The art is to take a piece by enclosing it between two of yours — and to box the foe in.",
+    a:"Dark", b:"Pale", caption:"the polis, after Pollux"
+  }
+};
+
+function srcNote(){
+  const t=[];
+  t.push("<b>grid board</b> — Varro");
+  t.push("<b>custodial capture</b> — Ovid · Pollux");
+  if(g.r.setup==="placement")t.push("<b>open-board placement</b> — Laus Pisonis");
+  if(g.r.freeing)t.push("<b>freeing the incitus</b> — Seneca");
+  if(g.r.victory!=="annihilate")t.push("<b>blockade wins</b> — Plato · Polybius");
+  t.push("<b>vagus / ordinarius / incitus</b> — Isidore");
+  return t.join("<br>");
+}
+
+function render(){
+  grid.style.setProperty("--n",g.W);
+  grid.innerHTML="";
+  const last=g.lastMove[3-g.toMove];
+  for(let y=0;y<g.H;y++)for(let x=0;x<g.W;x++){
+    const i=I(g,x,y);
+    const cell=document.createElement("button");
+    cell.className="cell"; cell.dataset.i=i;
+    cell.setAttribute("aria-label",`column ${x+1}, row ${y+1}`);
+    if(last&&(last[0]===i||last[1]===i))cell.classList.add("lastmove");
+    if(x===0&&y===0){const cd=document.createElement("span");cd.className="coord";cd.textContent="a1";cell.appendChild(cd);}
+    const v=g.board[i];
+    if(v){const pc=document.createElement("div");
+      pc.className="piece "+(v===1?"a":"b")+(g.frozen.has(i)?" incitus":"");
+      cell.appendChild(pc);}
+    grid.appendChild(cell);
+  }
+  // selection + legal targets
+  if(g.selected!=null){
+    const sc=grid.children[g.selected]; if(sc)sc.classList.add("selected");
+    for(const m of legalMoves(g))if(m[0]==="move"&&m[1]===g.selected)
+      grid.children[m[2]].classList.add("legal");
+  } else if(g.phase===0 && g.result===null && !(g.r.opponent==="house"&&g.toMove===2)){
+    for(const m of legalMoves(g))grid.children[m[1]].classList.add("legal");
+  }
+  // panel
+  const L=LABELS[g.r.tradition];
+  const placing=g.phase===0;
+  $("phase").textContent=placing?L.placeName:L.moveName;
+  $("phase-note").innerHTML=placing?L.placeNote:L.moveNote;
+  $("turn-dot").className="dot "+(g.toMove===1?"a":"b");
+  const who=g.toMove===1?L.a:L.b;
+  $("turn-text").textContent=g.result!==null?"—":`${who} to ${placing?"place":"move"}`;
+  $("ta").textContent=g.r.pieces-count(g,1);
+  $("tb").textContent=g.r.pieces-count(g,2);
+  $("lbl-left").textContent=`incised board · ${g.W} × ${g.H}`;
+  $("lbl-right").textContent=L.caption;
+  $("srcnote").innerHTML=srcNote();
+  $("pass").style.display=(g.result===null&&legalMoves(g).length===0)?"":"none";
+}
+
+function setStatus(msg,win){const s=$("status");s.textContent=msg;s.classList.toggle("win",!!win);}
+
+function announceEnd(){
+  const L=LABELS[g.r.tradition];
+  if(g.result===0){setStatus("Drawn — the move limit was reached with the line unbroken.",true);return;}
+  const winner=g.result===1?L.a:L.b;
+  // why?
+  const loser=g.result===1?2:1;
+  const reason=count(g,loser)<=g.r.minPieces?"the enemy army is broken":"the foe has no move left — blockaded";
+  setStatus(`${winner} wins — ${reason}.`,true);
+}
+
+function afterMove(){
+  render();
+  if(g.result!==null){announceEnd();return;}
+  if(g.r.opponent==="house"&&g.toMove===2){
+    setStatus("The House considers…");
+    setTimeout(()=>{
+      const m=houseMove(g);
+      if(m){applyAction(g,m);} else {/* blockaded handled by checkEnd */}
+      render(); if(g.result!==null)announceEnd();
+      else setStatus(`${LABELS[g.r.tradition].a} to ${g.phase===0?"place":"move"}.`);
+    },260);
+  }
+}
+
+grid.addEventListener("click",e=>{
+  const cell=e.target.closest(".cell"); if(!cell||g.result!==null)return;
+  if(g.r.opponent==="house"&&g.toMove===2)return;
+  const i=+cell.dataset.i;
+  if(g.phase===0){
+    if(g.board[i]===0){g.selected=null;applyAction(g,["place",i]);afterMove();}
+    return;
+  }
+  // movement
+  if(g.board[i]===g.toMove&&!g.frozen.has(i)){g.selected=(g.selected===i?null:i);render();return;}
+  if(g.selected!=null){
+    const legal=legalMoves(g).some(m=>m[0]==="move"&&m[1]===g.selected&&m[2]===i);
+    if(legal){const sel=g.selected;g.selected=null;applyAction(g,["move",sel,i]);afterMove();}
+    else {g.selected=null;render();}
+  }
+});
+
+/* ---- controls ---- */
+function seg(id,key,after){
+  $(id).querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+    $(id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");
+    Rules[key]=isNaN(+b.dataset.v)?b.dataset.v:+b.dataset.v;
+    if(after)after(b.dataset.v);
+    newGame();
+  }));
+}
+seg("seg-setup","setup");
+seg("seg-move","movement");
+seg("seg-vic","victory");
+seg("seg-opp","opponent",v=>toggleHouseOpts(v==="house"));
+
+// difficulty & style: change live, WITHOUT resetting the game in progress
+function segNoReset(id,key){
+  $(id).querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+    $(id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");
+    Rules[key]=b.dataset.v; g.r[key]=b.dataset.v;   // apply to live game too
+  }));
+}
+segNoReset("seg-level","houseLevel");
+segNoReset("seg-style","houseStyle");
+const toggleHouseOpts=show=>{$("house-opts").style.display=show?"":"none";};
+$("seg-size").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+  $("seg-size").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false"));
+  b.setAttribute("aria-pressed","true");
+  const n=+b.dataset.v; Rules.W=n;Rules.H=n;
+  Rules.pieces=n===7?12:(n===9?18:16);
+  newGame();
+}));
+$("sw-corner").addEventListener("change",e=>{Rules.corner=e.target.checked;newGame();});
+$("sw-free").addEventListener("change",e=>{Rules.freeing=e.target.checked;newGame();});
+$("new").addEventListener("click",newGame);
+$("pass").addEventListener("click",()=>{ // forced pass: hand turn over
+  g.toMove=3-g.toMove; checkEnd(g); afterMove();
+});
+
+function setTradition(t){
+  Rules.tradition=t;
+  $("tab-roman").setAttribute("aria-pressed",t==="roman");
+  $("tab-greek").setAttribute("aria-pressed",t==="greek");
+  // preset the reconstruction defaults from the document
+  if(t==="greek"){Object.assign(Rules,{setup:"placement",movement:"slide",corner:true,freeing:false,victory:"blockade",capRule:"material"});}
+  else{Object.assign(Rules,{setup:"placement",movement:"slide",corner:true,freeing:false,victory:"both",capRule:"material"});}
+  syncControls(); newGame();
+}
+function syncControls(){
+  const set=(id,val)=>$(id).querySelectorAll("button").forEach(b=>
+    b.setAttribute("aria-pressed", String((isNaN(+b.dataset.v)?b.dataset.v:+b.dataset.v)===val)));
+  set("seg-setup",Rules.setup); set("seg-move",Rules.movement);
+  set("seg-vic",Rules.victory); set("seg-opp",Rules.opponent);
+  set("seg-size",Rules.W);
+  set("seg-level",Rules.houseLevel); set("seg-style",Rules.houseStyle);
+  toggleHouseOpts(Rules.opponent==="house");
+  $("sw-corner").checked=Rules.corner; $("sw-free").checked=Rules.freeing;
+}
+$("tab-roman").addEventListener("click",()=>setTradition("roman"));
+$("tab-greek").addEventListener("click",()=>setTradition("greek"));
+
+function newGame(){
+  g=makeGame({...Rules}); render();
+  const L=LABELS[g.r.tradition];
+  setStatus(g.phase===0?`${L.a} places first. Click any empty cell.`:`${L.a} moves first.`);
+}
+
+setTradition("greek");
+</script>
+</body>
+</html>
