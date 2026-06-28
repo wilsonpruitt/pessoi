@@ -187,6 +187,7 @@
   .sources-note{margin-top:18px;font:400 10.5px/1.5 "IBM Plex Mono";
     color:var(--ink-soft);border-top:1px solid var(--line);padding-top:12px}
   .sources-note b{color:var(--ink)}
+  .sources-note a{color:var(--verdigris-d);text-decoration:underline}
   .epigraph{margin:12px 0 0;max-width:46ch;font:400 16px/1.55 "Fraunces",Georgia,serif;
     font-style:italic;color:var(--ink);letter-spacing:.01em}
   .epigraph .gloss{display:block;font:400 10.5px/1.6 "IBM Plex Mono";font-style:normal;
@@ -380,9 +381,11 @@
   </div>
 </div>
 
-<!-- Ambient music for Watch mode. preload=none (never delays first paint); starts
-     only on a user gesture (autoplay policy). Drop an ancient/Mediterranean track
-     at web/ambient.mp3 — until then the toggle is a graceful no-op. -->
+<!-- Ambient music: the "Epitaph of Seikilos" (oldest complete surviving piece of
+     music, 1st c. AD), sung by Marcus Harvey. Source: Wikimedia Commons, licensed
+     CC BY-SA 2.5 — attribution shown in the sources note; this audio (incl. the
+     ogg→mp3 conversion) stays under CC BY-SA 2.5 (share-alike). preload=none so it
+     never delays first paint; starts on a user gesture (autoplay policy). -->
 <audio id="bgm" src="ambient.mp3" loop preload="none"></audio>
 
 <script>
@@ -716,6 +719,10 @@ function srcNote(){
   if(g.r.freeing)t.push("<b>freeing the incitus</b> — Seneca");
   if(g.r.victory!=="annihilate")t.push("<b>blockade wins</b> — Plato · Polybius");
   t.push("<b>vagus / ordinarius / incitus</b> — Isidore");
+  // CC BY-SA 2.5 requires this credit be shown (author · title · license link).
+  t.push('<b>music</b> — “Epitaph of Seikilos” sung by Marcus Harvey · '
+    +'<a href="https://commons.wikimedia.org/wiki/File:%CE%9F_%CE%95%CF%80%CE%B9%CF%84%CE%AC%CF%86%CE%B9%CE%BF%CF%82_%CF%84%CE%BF%CF%85_%CE%A3%CE%B5%E1%BF%96%CE%BA%CE%B9%CE%BB%CE%BF%CF%85_-_Epitaph_of_Seikilos.ogg">Wikimedia</a>, '
+    +'<a href="https://creativecommons.org/licenses/by-sa/2.5/">CC&nbsp;BY-SA&nbsp;2.5</a>');
   return t.join("<br>");
 }
 
