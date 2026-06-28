@@ -757,7 +757,8 @@ const I18N={
     end_draw:"Drawn — the move limit was reached with the line unbroken.",
     end_win:"{winner} wins — {reason}.",
     reason_broken:"the enemy army is broken", reason_blockaded:"the foe has no move left — blockaded",
-    tally_taken:"{name} taken", board_label:"incised board · {w} × {h}",
+    tally_taken:"{name} taken", tally_toplace:"{name} to place",
+    board_label:"incised board · {w} × {h}",
     src_grid:"<b>grid board</b> — Varro", src_capture:"<b>custodial capture</b> — Ovid · Pollux",
     src_placement:"<b>open-board placement</b> — Laus Pisonis",
     src_freeing:"<b>freeing the incitus</b> — Seneca",
@@ -798,7 +799,8 @@ const I18N={
     end_draw:"Döntetlen — a lépéskorlát elérve, a vonal töretlen.",
     end_win:"{winner} nyer — {reason}.",
     reason_broken:"az ellenséges sereg megtört", reason_blockaded:"az ellenfélnek nincs több lépése — blokád",
-    tally_taken:"{name} ütve", board_label:"vésett tábla · {w} × {h}",
+    tally_taken:"{name} ütve", tally_toplace:"{name} hátra",
+    board_label:"vésett tábla · {w} × {h}",
     src_grid:"<b>rácstábla</b> — Varro", src_capture:"<b>közrezáró ütés</b> — Ovidius · Pollux",
     src_placement:"<b>nyílt táblás lerakás</b> — Laus Pisonis",
     src_freeing:"<b>az incitus felszabadítása</b> — Seneca",
@@ -887,10 +889,17 @@ function render(){
   $("turn-dot").className="dot "+(g.toMove===1?"a":"b");
   const who=g.toMove===1?L.a:L.b;
   $("turn-text").textContent=g.result!==null?"—":t(placing?"to_place":"to_move",{who}).replace(/\.$/,"");
-  $("ta").textContent=g.r.pieces-count(g,1);
-  $("tb").textContent=g.r.pieces-count(g,2);
-  $("ka").textContent=t("tally_taken",{name:L.a.toLowerCase()});
-  $("kb").textContent=t("tally_taken",{name:L.b.toLowerCase()});
+  // during placement the counters show pieces still IN HAND (counting down);
+  // once both sides are down, they switch to counting captures.
+  if(placing){
+    $("ta").textContent=g.toPlace[1]; $("tb").textContent=g.toPlace[2];
+    $("ka").textContent=t("tally_toplace",{name:L.a.toLowerCase()});
+    $("kb").textContent=t("tally_toplace",{name:L.b.toLowerCase()});
+  }else{
+    $("ta").textContent=g.r.pieces-count(g,1); $("tb").textContent=g.r.pieces-count(g,2);
+    $("ka").textContent=t("tally_taken",{name:L.a.toLowerCase()});
+    $("kb").textContent=t("tally_taken",{name:L.b.toLowerCase()});
+  }
   $("lbl-left").textContent=t("board_label",{w:g.W,h:g.H});
   $("lbl-right").textContent=L.caption;
   $("srcnote").innerHTML=srcNote();
