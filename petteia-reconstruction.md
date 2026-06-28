@@ -74,12 +74,12 @@ The Latin sources are read here not as a *rival* game's evidence but as the rece
 
 The game exists by the eighth century and needs no gloss — Homer can name *pessoi* and expect to be understood. No mechanics; existence only.
 
-**Plato, *Republic* 487b–c** — immobilisation as the image of defeat.
-> …ὥσπερ ὑπὸ τῶν πεττεύειν δεινῶν οἱ μὴ δεινοὶ τελευτῶντες ἀποκλείονται καὶ οὐκ ἔχουσιν ὅ τι φέρωσιν.
+**Plato, *Republic* 487b–c** — immobilisation as the image of defeat. *(Greek verified against the Loeb, Shorey, vol. II.)*
+> …καὶ ὥσπερ ὑπὸ τῶν πεττεύειν δεινῶν οἱ μὴ δεινοὶ τελευτῶντες ἀποκλείονται καὶ οὐκ ἔχουσιν ὅ τι φέρωσιν, οὕτω καὶ σφεῖς τελευτῶντες ἀποκλείεσθαι καὶ οὐκ ἔχειν ὅ τι λέγωσιν ὑπὸ πεττείας αὖ ταύτης τινὸς ἑτέρας, οὐκ ἐν ψήφοις ἀλλ' ἐν λόγοις.
 >
-> *…just as the unskilled, at the hands of those clever at* petteia*, are in the end shut in and have no move left to play.*
+> *…and just as the unskilled, at the hands of those clever at* petteia*, are in the end shut in and have no move left to play, so these too are at last blocked and left with nothing to say — by this other* petteia*, played not with counters (*psēphoi*) but with words.*
 
-Socrates' simile for an interlocutor argued into silence. What it fixes for us is the *shape of losing*: not the loss of material but being **hemmed in until no legal move remains** — the blockade win of §3, attested at the root.
+Socrates' simile for an interlocutor argued into silence. What it fixes for us is the *shape of losing*: not the loss of material but being **hemmed in until no legal move remains** — the blockade win of §3, attested at the root. (Note the cross-link to Pollux: the pieces are *psēphoi* here too.) With the Polybius simile now in doubt (below), this is the **load-bearing** attestation that immobilisation *is* the image of defeat.
 
 **Plato, *Phaedrus* 274c–d** — petteia among the arts, and distinct from dice.
 > …εὑρεῖν δὲ ἀριθμόν τε καὶ λογισμὸν καὶ γεωμετρίαν καὶ ἀστρονομίαν, ἔτι δὲ πεττείας τε καὶ κυβείας, καὶ δὴ καὶ γράμματα.
