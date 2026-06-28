@@ -63,7 +63,7 @@ The Latin sources are read here not as a *rival* game's evidence but as the rece
 
 *The tables above say what each source* fixes*; here is the source itself. A reconstruction that grades its rules by attestation owes the reader the attested words, not just a citation to chase.*
 
-> **Editorial note.** The original-language text below is a **working transcription**, set for sense and to be **proofed against a critical edition before publication** — Burnet's *Oxford Classical Texts* for Plato, Ross for Aristotle, Bethe for Pollux, the Teubner Ovid, and so on. The original languages are public domain and may be set freely; the **English is fresh (Wroot Press) and open to revision** — literal rather than literary, so the technical vocabulary (*pessoi*, *kyon*, *calculus*, *latro*) shows through. Where a passage is quoted only in part by a later source, or where the exact wording is still to be set, this is marked **[text to source]**.
+> **Editorial note.** The keystone (**Pollux IX.98**) is set from Dindorf's edition (Leipzig 1824) and verified against the page. The remaining original-language text is a **working transcription** to be **proofed against a standard edition before publication** — the Loeb facing texts where one exists (Plato, Aristotle, Ovid, Martial, the *Laus Pisonis* in *Minor Latin Poets*), with Lindsay's *OCT* for Isidore. The original languages are public domain and may be set freely; the **English is fresh (Wroot Press) and open to revision** — literal rather than literary, so the technical vocabulary (*pessoi*, *kyon*, *calculus*, *latro*) shows through. Where a passage is quoted only in part by a later source, or where the exact wording is still to be set, this is marked **[text to source]**.
 
 #### The Greek game
 
@@ -102,12 +102,12 @@ The decisive word is **ἄζυξ** — "unyoked, unpaired." A piece without a pa
 
 The simile runs the other way from Plato's: not the game illustrating life but a general's *blockade strategy* illustrated by **expert petteia**. Encirclement and containment — not annihilation — are what a strong player is understood to do. (The Greek of the fragment is to be located and set.)
 
-**Pollux, *Onomasticon* IX.97–98** — the keystone.
-> ἡ δὲ διὰ πολλῶν ψήφων παιδιὰ πλινθίον ἐστὶ χώρας ἐν γραμμαῖς ἔχον διακειμένας· καὶ τὸ μὲν πλινθίον καλεῖται πόλις, τῶν δὲ ψήφων ἑκάστη κύων· διῃρημένων δὲ εἰς δύο τῶν ψήφων κατὰ τὰς χρόας, ἡ τέχνη τῆς παιδιᾶς ἐστι περιλαβόντα ταῖς δύο ψήφοις ὁμόχροις τὴν ἑτερόχρων ἀνελεῖν. *[transcription to proof against Bethe's Teubner]*
+**Pollux, *Onomasticon* IX.98** — the keystone. *(Greek set from Dindorf's edition, Leipzig 1824.)*
+> Ἡ δὲ διὰ πολλῶν ψήφων παιδιὰ πλινθίον ἐστὶ, χώρας ἐν γραμμαῖς ἔχον διακειμένας· καὶ τὸ μὲν πλινθίον καλεῖται πόλις· τῶν δὲ ψήφων ἑκάστη, κύων· διῃρημένων δὲ εἰς δύο τῶν ψήφων κατὰ τὰς χρόας, ἡ τέχνη τῆς παιδιᾶς ἔστι περιλήψει τῶν δύο ψήφων ὁμοχρόων τὴν ἑτερόχρουν ἀναιρεῖν.
 >
-> *The game played with many pieces is a board having spaces set out among lines; the board is called* polis *(city), and each of the pieces a "dog" (*kyon*). The pieces being divided into two by colour, the art of the game is to take a piece of the other colour by surrounding it with two of one's own.*
+> *The game played with many counters (*psēphoi*) is a* plinthion *— a tiled block having its spaces set out among lines. The block is called the* polis *(city), and each of the counters a "dog" (*kyon*). The counters being divided into two by colour, the art of the game is, by the **encirclement** of two same-coloured counters, to remove the one of the other colour.*
 
-Four rules in one sentence: a **lined grid** called the *polis*; pieces called **dogs**; **two colours**; and **capture by surrounding a piece with two of one's own**. Everything structural in §3 that is graded **[A]** rests here. Pollux also names "five-lines" as a *separate* game in the same passage — the textual basis for not conflating them.
+Four rules in one sentence: a **lined grid** called the *polis*; pieces called **dogs**; **two colours**; and **capture by encircling a piece between two of one's own**. Everything structural in §3 that is graded **[A]** rests here — and the verb is exact: *perilēpsei… anairein*, "to remove by encirclement," the custodial rule named outright. The same passage twice supports our cautions. It calls the *pessoi* plain *psēphoi* (counters, no hierarchy — §2.3); and immediately *before* it Pollux sets out a **different** game, "five-lines" (*pente grammai*), with its "sacred line" and the proverb *κίνει τὸν ἀφ' ἱερᾶς* ("move the piece from the sacred line") — the textual basis for refusing to conflate the two (§1A caution). Pollux then quotes Cratinus punning on *kyna kai polin* ("dog and city"), proof the terminology was proverbial.
 
 #### The Roman reception
 
