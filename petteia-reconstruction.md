@@ -59,6 +59,88 @@ The Latin sources are read here not as a *rival* game's evidence but as the rece
 
 **Computational check (Crist, Piette, Soemers, Stephenson & Browne, 2024, via Ludii).** Independent support for two of our calls: **slide movement** is playable and source-consistent; the **large rectangular boards** (8×12 Colchester-type) **stall out** under every custodial ruleset — evidence they were a different game, and that the real game lived on the squarer 7×8–9×9 boards.
 
+### 1C. The witnesses in their own words
+
+*The tables above say what each source* fixes*; here is the source itself. A reconstruction that grades its rules by attestation owes the reader the attested words, not just a citation to chase.*
+
+> **Editorial note.** The original-language text below is a **working transcription**, set for sense and to be **proofed against a critical edition before publication** — Burnet's *Oxford Classical Texts* for Plato, Ross for Aristotle, Bethe for Pollux, the Teubner Ovid, and so on. The original languages are public domain and may be set freely; the **English is fresh (Wroot Press) and open to revision** — literal rather than literary, so the technical vocabulary (*pessoi*, *kyon*, *calculus*, *latro*) shows through. Where a passage is quoted only in part by a later source, or where the exact wording is still to be set, this is marked **[text to source]**.
+
+#### The Greek game
+
+**Homer, *Odyssey* 1.106–107** — the oldest witness.
+> πεσσοῖσι προπάροιθε θυράων θυμὸν ἔτερπον, / ἥμενοι ἐν ῥινοῖσι βοῶν, οὓς ἔκτανον αὐτοί.
+>
+> *…before the doors they [the suitors] were delighting their hearts with* pessoi*, seated on the hides of oxen they had themselves slaughtered.*
+
+The game exists by the eighth century and needs no gloss — Homer can name *pessoi* and expect to be understood. No mechanics; existence only.
+
+**Plato, *Republic* 487b–c** — immobilisation as the image of defeat.
+> …ὥσπερ ὑπὸ τῶν πεττεύειν δεινῶν οἱ μὴ δεινοὶ τελευτῶντες ἀποκλείονται καὶ οὐκ ἔχουσιν ὅ τι φέρωσιν.
+>
+> *…just as the unskilled, at the hands of those clever at* petteia*, are in the end shut in and have no move left to play.*
+
+Socrates' simile for an interlocutor argued into silence. What it fixes for us is the *shape of losing*: not the loss of material but being **hemmed in until no legal move remains** — the blockade win of §3, attested at the root.
+
+**Plato, *Phaedrus* 274c–d** — petteia among the arts, and distinct from dice.
+> …εὑρεῖν δὲ ἀριθμόν τε καὶ λογισμὸν καὶ γεωμετρίαν καὶ ἀστρονομίαν, ἔτι δὲ πεττείας τε καὶ κυβείας, καὶ δὴ καὶ γράμματα.
+>
+> *…and [the god Theuth] invented number and calculation and geometry and astronomy, and further* petteia *and dice (*kybeia*), and, above all, letters.*
+
+Two things: petteia is filed with the reckoning-arts (a game of calculation, not chance), and it is named **separately from dice** — warrant for keeping our game clear of the race-and-dice "five-lines" with which popular accounts conflate it (§1A caution).
+
+**Aristotle, *Politics* 1253a** — isolation is vulnerability.
+> …ἅμα γὰρ φύσει τοιοῦτος καὶ πολέμου ἐπιθυμητής, ἅτε περ ἄζυξ ὢν ὥσπερ ἐν πεττοῖς.
+>
+> *…for such a man [the cityless one] is by nature also a lover of war, inasmuch as he is unpaired, like an isolated piece in* petteia.
+
+The decisive word is **ἄζυξ** — "unyoked, unpaired." A piece without a partner is exposed; mutual support is strength. This is the custodial logic stated as political metaphor: a lone stone is a captured stone waiting to happen.
+
+**Polybius (on Scipio Aemilianus)** — victory modelled on the game.
+> [text to source — fragment preserved in later citation]
+>
+> *He destroyed many men without a battle, by cutting them off and blockading them, like a clever* petteia*-player.*
+
+The simile runs the other way from Plato's: not the game illustrating life but a general's *blockade strategy* illustrated by **expert petteia**. Encirclement and containment — not annihilation — are what a strong player is understood to do. (The Greek of the fragment is to be located and set.)
+
+**Pollux, *Onomasticon* IX.97–98** — the keystone.
+> ἡ δὲ διὰ πολλῶν ψήφων παιδιὰ πλινθίον ἐστὶ χώρας ἐν γραμμαῖς ἔχον διακειμένας· καὶ τὸ μὲν πλινθίον καλεῖται πόλις, τῶν δὲ ψήφων ἑκάστη κύων· διῃρημένων δὲ εἰς δύο τῶν ψήφων κατὰ τὰς χρόας, ἡ τέχνη τῆς παιδιᾶς ἐστι περιλαβόντα ταῖς δύο ψήφοις ὁμόχροις τὴν ἑτερόχρων ἀνελεῖν. *[transcription to proof against Bethe's Teubner]*
+>
+> *The game played with many pieces is a board having spaces set out among lines; the board is called* polis *(city), and each of the pieces a "dog" (*kyon*). The pieces being divided into two by colour, the art of the game is to take a piece of the other colour by surrounding it with two of one's own.*
+
+Four rules in one sentence: a **lined grid** called the *polis*; pieces called **dogs**; **two colours**; and **capture by surrounding a piece with two of one's own**. Everything structural in §3 that is graded **[A]** rests here. Pollux also names "five-lines" as a *separate* game in the same passage — the textual basis for not conflating them.
+
+#### The Roman reception
+
+**Ovid, *Ars Amatoria* III.357–358** — custodial capture, Latin side.
+> Cautaque non stulte latronum proelia ludat, / unus cum gemino calculus hoste perit.
+>
+> *And let her play, shrewdly and not foolishly, the battles of the brigand-pieces (*latrones*) — where a single piece (*calculus*) is lost when caught between a pair of foes.*
+
+Independent Latin confirmation of Pollux's enclosure rule: **one piece dies between two enemies** (*gemino… hoste*). The pieces are *latrones*, the soldier-name that gives *latrunculi*.
+
+**Ovid, *Tristia* II.477–478** — capture *and* a moving line.
+> Discolor ut recto grassetur limite miles, / cum medius gemino calculus hoste perit.
+>
+> *…how the piece of opposing colour advances along a straight line, when the piece caught in the middle perishes between two foes.*
+
+The same capture couplet Ovid liked enough to reuse — but here prefaced by **recto… limite**, movement "along a straight line." A modest Latin foothold for ranged, orthogonal motion (the slide of §3) alongside the enclosure rule.
+
+**Martial, *Epigrams* XIV.17 (*Calculi*)** — two colours in opposition.
+> Insidiosorum si ludis bella latronum, / gemmeus iste tibi miles et hostis erit.
+>
+> *If you play the treacherous wars of the brigand-pieces, this glass man will be for you both soldier and foe.*
+
+A gift-tag couplet for a set of gaming-stones: **two-coloured pieces** (*miles et hostis*, your man and your enemy, told apart only by colour), made of glass — corroborating the uniform two-colour counters of the archaeology.
+
+**Laus Pisonis 190–208** — the richest gameplay source either tradition has.
+> [key lines to set from the text — incl. *vitreo… milite* (glass soldiery); play on the *tabula… aperta* (the open board); a piece that *retreats yet captures its pursuer*; a *reserve* that re-enters; one that "seemingly checked, itself checks two."]
+>
+> *Substance:* praise of Piso's skill at the *latrunculi*: pieces deployed cleverly across an **open board** (whence our placement opening), a piece that **withdraws and still takes the pursuer**, a **reserve brought back into play**, and a stroke in which a piece **apparently trapped turns the trap on two** — the "breaking of the line" we read as ranged movement.
+
+This is the passage that *fills the two Greek gaps* (§4): open-board **placement** and line-breaking **slide**. Because so much hangs on it, its Latin should be set in full and translated line-by-line — **next on the docket.** [text to source]
+
+**Varro**, *De Lingua Latina* X.22 *(grid analogy)*; **Seneca**, *alligatus* (the contested "freeing" metaphor, §4); **Isidore**, *Etymologiae* XVIII (*vagus*, *ordinarius*, *incitus*; the idiom *ad incitas redigere*); **Plautus**, *Poenulus* 905 & **Lucilius** (*ad incitas redigere*, "reduced to a standstill" = beaten). — **[text to source]:** these are cited for single words or a single idiom rather than continuous description; each is to be quoted in situ with its line, so the reader can weigh the **incitus / immobilisation** vocabulary directly. Slated with the *Laus Pisonis* for the next pass.
+
 ---
 
 ## 2. What the sources fix vs. leave open
@@ -167,6 +249,9 @@ The responses are not exclusive — one could adopt A in the prose now and flag 
 ---
 
 ## 7. Sources (primary first)
+
+*The key passages are quoted in the original and in fresh translation in **§1C, "The witnesses in their own words."***
+
 
 **Greek (the canonical game).** Homer, *Odyssey* 1.107 · Plato, *Republic* 487b–c; *Phaedrus* 274c–d · Aristotle, *Politics* 1253a · Polybius (on Scipio Aemilianus) · Pollux, *Onomasticon* IX.97–98 *(keystone)*.
 
