@@ -37,7 +37,7 @@ So we anchor in **Petteia / Polis** and treat *Latrunculi* as its **Roman recept
 | **Plato**, *Republic* 487b–c | 4th c. BCE | The weak player is "**shut in and unable to move**" by the skilled. Fixes **immobilisation/blockade as a decisive condition**, not merely material capture. |
 | **Plato**, *Phaedrus* 274c–d | 4th c. BCE | *Petteia* among Theuth's Egyptian inventions → a claimed pedigree; groups *petteia* with dice-games as separate things. |
 | **Aristotle**, *Politics* 1253a | 4th c. BCE | The stateless man is *azux* — an "**unpaired piece** in *petteia*." Confirms **isolation = vulnerability**, support = strength. |
-| **Polybius** (on Scipio Aemilianus) | 2nd c. BCE | Scipio beat enemies "**by cutting them off and blockading them, like a clever *petteia*-player**." **Blockade**, not annihilation, as the model of victory. |
+| **Polybius**, *Histories* 1.84.7–8 (on Hamilcar Barca) | 2nd c. BCE | Hamilcar destroyed the enemy "**without a battle**, hemming them in and cutting them off, **like a good *petteia*-player**." **Blockade**, not annihilation, as the model of victory. *(Widely misquoted as "Scipio"; corrected — §1C.)* |
 | **Pollux**, *Onomasticon* IX.97–98 | 2nd c. CE | **The keystone.** The board "played with many pieces," set in lines/cells, is called ***polis*** (city); each **piece is a *kyon*** (dog); pieces are **two colours**; the art is to take a piece "by **enclosing it between two**" of the other colour. (Also names "five-lines" as a *separate* game.) |
 
 **Caution on conflation.** The "five lines" (*pente grammai*) game is a **different**, partly race-based game; popular accounts fold it into petteia. Our *petteia* is specifically **Pollux's *polis***. **Setup and piece-count are nowhere stated**; the repeated "~30 pieces" is Murray's conjecture, not a source.
@@ -79,7 +79,7 @@ The game exists by the eighth century and needs no gloss — Homer can name *pes
 >
 > *…and just as the unskilled, at the hands of those clever at* petteia*, are in the end shut in and have no move left to play, so these too are at last blocked and left with nothing to say — by this other* petteia*, played not with counters (*psēphoi*) but with words.*
 
-Socrates' simile for an interlocutor argued into silence. What it fixes for us is the *shape of losing*: not the loss of material but being **hemmed in until no legal move remains** — the blockade win of §3, attested at the root. (Note the cross-link to Pollux: the pieces are *psēphoi* here too.) With the Polybius simile now in doubt (below), this is the **load-bearing** attestation that immobilisation *is* the image of defeat.
+Socrates' simile for an interlocutor argued into silence. What it fixes for us is the *shape of losing*: not the loss of material but being **hemmed in until no legal move remains** — the blockade win of §3, attested at the root. (Note the cross-link to Pollux: the pieces are *psēphoi* here too.) Together with Polybius' Hamilcar simile (below, now verified and re-attributed), this is the **load-bearing** attestation that immobilisation *is* the image of defeat.
 
 **Plato, *Phaedrus* 274c–d** — petteia among the arts, and distinct from dice.
 > …εὑρεῖν δὲ ἀριθμόν τε καὶ λογισμὸν καὶ γεωμετρίαν καὶ ἀστρονομίαν, ἔτι δὲ πεττείας τε καὶ κυβείας, καὶ δὴ καὶ γράμματα.
@@ -95,12 +95,14 @@ Two things: petteia is filed with the reckoning-arts (a game of calculation, not
 
 The decisive word is **ἄζυξ** — "unyoked, unpaired." A piece without a partner is exposed; mutual support is strength. This is the custodial logic stated as political metaphor: a lone stone is a captured stone waiting to happen.
 
-**Polybius (on Scipio Aemilianus)** — victory modelled on the game.
-> [text to source — fragment preserved in later citation]
+**Polybius, *Histories* 1.84.7–8 (on Hamilcar Barca)** — victory modelled on the game. *(Citation corrected — see note.)*
+> [Greek and Paton's English to set from the Loeb, vol. I, or Perseus 1.84.7–8]
 >
-> *He destroyed many men without a battle, by cutting them off and blockading them, like a clever* petteia*-player.*
+> *…like a good* petteia*-player, hemming them in and cutting them off, he destroyed great numbers of the enemy without a battle.*
 
-The simile runs the other way from Plato's: not the game illustrating life but a general's *blockade strategy* illustrated by **expert petteia**. Encirclement and containment — not annihilation — are what a strong player is understood to do. (The Greek of the fragment is to be located and set.)
+In the Mercenary (Truceless) War, Hamilcar traps the Libyan and mercenary force in waterless country and reduces it by manoeuvre. The simile runs the other way from Plato's: not the game illustrating life but a general's **blockade strategy** illustrated by expert *petteia* — encirclement and containment, *ἀμαχεί* ("without a battle"), not annihilation, as what a strong player does. It is the cleanest ancient statement that the game is *won by hemming in*.
+
+> **Attribution note — a correction worth flagging.** This simile is very widely quoted online (and stood in an earlier draft of this document) as **Polybius on *Scipio Aemilianus***. That is wrong: the passage is **Polybius 1.84**, and its subject is **Hamilcar Barca** in the Mercenary War of 241–238 BCE. The error is easy to see how it spread — Scipio's later blockade of Numantia is the more famous "win-by-siege," so the simile drifted onto him — but Polybius applies it to Hamilcar. We had nearly struck the citation as apocryphal after failing to find it in Loeb vols IV–VI (Books 9–39); it was simply in **Book 1**, a volume we had not checked. A small case study in the project's own rule: verify the locus, don't trust the repetition.
 
 **Pollux, *Onomasticon* IX.98** — the keystone. *(Greek set from Dindorf's edition, Leipzig 1824.)*
 > Ἡ δὲ διὰ πολλῶν ψήφων παιδιὰ πλινθίον ἐστὶ, χώρας ἐν γραμμαῖς ἔχον διακειμένας· καὶ τὸ μὲν πλινθίον καλεῖται πόλις· τῶν δὲ ψήφων ἑκάστη, κύων· διῃρημένων δὲ εἰς δύο τῶν ψήφων κατὰ τὰς χρόας, ἡ τέχνη τῆς παιδιᾶς ἔστι περιλήψει τῶν δύο ψήφων ὁμοχρόων τὴν ἑτερόχρουν ἀναιρεῖν.
@@ -246,7 +248,7 @@ The structured-decision rationale and per-rule confidence grades are kept in the
 
 **This forces a choice the engine cannot make.** It is set down here as an open editorial fork, not a settled revision:
 
-- **Response A — editorial precision.** Keep blockade as the victory the sources unambiguously attest — Plato's cornering, Polybius' Scipio, Aristotle's *azux* are not in doubt — but stop letting "primary" imply it is *how strong play wins*. State plainly that under competent play the **material tie-break** (already adopted in §3 for decisiveness) is the de-facto decider, with blockade the rarer, more elegant finish and the thematic image of defeat. This costs the headline that most sharply distinguished this reconstruction from Schädler/Murray (§5.2) — but it is the more defensible reading, because what is graded **[A]** is that blockade is *a* decisive condition and *the* image of defeat, never that it is the statistically dominant outcome.
+- **Response A — editorial precision.** Keep blockade as the victory the sources unambiguously attest — Plato's cornering, Polybius' Hamilcar, Aristotle's *azux* are not in doubt — but stop letting "primary" imply it is *how strong play wins*. State plainly that under competent play the **material tie-break** (already adopted in §3 for decisiveness) is the de-facto decider, with blockade the rarer, more elegant finish and the thematic image of defeat. This costs the headline that most sharply distinguished this reconstruction from Schädler/Murray (§5.2) — but it is the more defensible reading, because what is graded **[A]** is that blockade is *a* decisive condition and *the* image of defeat, never that it is the statistically dominant outcome.
 
 - **Response B — revisit a [D] rule.** Treat the 0% as evidence a design choice mis-serves the attested goal, and change it. The prime suspect is **slide movement (D6)** — but reverting to step reintroduces the degeneracy §6B rejected, trading one pathology for another. The gentler lever is **board size (D4)**: blockade is markedly easier on smaller or edge-dense boards, several of which are archaeologically attested. The cost is honesty about motive — this would tune a [D] rule not toward the better-*playing* game but toward making an [A] *ideal* also the common outcome, inverting the governing rule that playability chooses only *among* what the sources leave open (§0; Design Decisions §0).
 
@@ -261,7 +263,7 @@ The responses are not exclusive — one could adopt A in the prose now and flag 
 *The key passages are quoted in the original and in fresh translation in **§1C, "The witnesses in their own words."***
 
 
-**Greek (the canonical game).** Homer, *Odyssey* 1.107 · Plato, *Republic* 487b–c; *Phaedrus* 274c–d · Aristotle, *Politics* 1253a · Polybius (on Scipio Aemilianus) · Pollux, *Onomasticon* IX.97–98 *(keystone)*.
+**Greek (the canonical game).** Homer, *Odyssey* 1.107 · Plato, *Republic* 487b–c; *Phaedrus* 274c–d · Aristotle, *Politics* 1253a · Polybius, *Histories* 1.84.7–8 (on Hamilcar Barca) · Pollux, *Onomasticon* IX.97–98 *(keystone)*.
 
 **Roman (the reception).** Varro, *De Lingua Latina* X.22 · Ovid, *Ars Amatoria* III.357–360; *Tristia* II.477 · Martial, *Epigrams* XIV.17 · *Laus Pisonis* 190–208 · Seneca (the *alligatus* metaphor) · Isidore, *Etymologiae* XVIII · Plautus, *Poenulus* 905 & Lucilius (*ad incitas redigere*).
 
