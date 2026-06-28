@@ -31,6 +31,24 @@
     --danger:#9a5a3c;
     --radius:3px;
   }
+  /* Ludus (Roman) wears a warmer skin than Pessoi (Greek): porphyry-brown board,
+     garnet-glass vs travertine counters, bronze-gold accents. Toggled by a body
+     class in setTradition so the two traditions read as different objects. */
+  body.trad-roman{
+    --slab:#5f4c39; --slab-cell:#6b563f; --slab-cell-d:#5d4a36;
+    --incise:#2a2014; --incise-hi:#8a6f4f;
+    --verdigris:#c2914e; --verdigris-d:#9a6f38;
+    --obsidian:#722620; --obsidian-hi:#b34a36;
+    --bone:#efe4cf; --bone-sh:#cbb78f;
+  }
+  body.trad-roman .slab{background:linear-gradient(150deg,var(--slab),#4f3f2e)}
+  body.trad-roman .cell:hover{background:#7a6147}
+  body.trad-roman .cell.lastmove{background:#7d6549}
+  body.trad-roman .piece.a{
+    background:
+      radial-gradient(circle at 36% 30%, var(--obsidian-hi), transparent 38%),
+      radial-gradient(circle at 50% 55%, #8c2e22, var(--obsidian) 70%);
+    color:#e7a18f}
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
   body{
@@ -173,7 +191,40 @@
     font-style:italic;color:var(--ink);letter-spacing:.01em}
   .epigraph .gloss{display:block;font:400 10.5px/1.6 "IBM Plex Mono";font-style:normal;
     color:var(--ink-soft);margin-top:4px;letter-spacing:0}
-  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  /* custodial-capture flash — pieces taken in pairs vanish with a bronze pulse,
+     the one thing Go/Hoshi can't show. */
+  .capflash{position:absolute;inset:16%;border-radius:50%;border:2px solid var(--danger);
+    pointer-events:none;animation:capf .62s ease-out forwards}
+  .capflash::before{content:"";position:absolute;inset:24%;border-radius:50%;
+    background:var(--danger);opacity:.5}
+  @keyframes capf{0%{opacity:.95;transform:scale(.45)}100%{opacity:0;transform:scale(1.3)}}
+  /* watch-mode side selectors: a coloured dot marks which selector drives which side */
+  .seldot{display:inline-block;width:11px;height:11px;border-radius:50%;
+    margin-right:7px;vertical-align:-1px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+  .seldot.a{background:radial-gradient(circle at 40% 35%,#3c5a59,var(--obsidian))}
+  .seldot.b{background:radial-gradient(circle at 40% 35%,#fff8e7,var(--bone-sh))}
+  .sidelegend{display:flex;align-items:center;font:500 10px/1 "IBM Plex Mono";
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin:10px 0 7px}
+  #music-toggle{margin-left:8px;background:transparent;border:1px solid var(--line);
+    border-radius:var(--radius);color:var(--ink-soft);font:500 11px/1 "IBM Plex Sans";
+    padding:5px 9px;cursor:pointer}
+  #music-toggle[aria-pressed="true"]{color:var(--pale);border-color:var(--verdigris-d);
+    background:var(--slab)}
+  /* the relocated options live behind a button — a clean board for newcomers */
+  .optbtn{width:100%;margin-top:10px}
+  .options-screen{position:fixed;inset:0;z-index:50;display:flex;
+    align-items:flex-start;justify-content:center;overflow:auto;padding:32px 16px;
+    background:rgba(20,22,17,.62);backdrop-filter:blur(3px)}
+  .options-screen[hidden]{display:none}
+  .options-card{width:100%;max-width:420px;background:var(--card);
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px 20px 24px;box-shadow:0 24px 60px -20px rgba(0,0,0,.7)}
+  .options-head{display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:6px}
+  .options-head h2{font-family:"Fraunces",serif;font-size:20px;font-weight:600;margin:0}
+  .options-head .btn{flex:0 0 auto;padding:9px 18px}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
+    .capflash{display:none}}
 </style>
 </head>
 <body>
@@ -181,10 +232,6 @@
   <header class="masthead">
     <h1 class="title"><a href="/" style="color:inherit;text-decoration:none">Pessoi</a><span class="sub">the game of Homer's counters, reconstructed · v0.3</span></h1>
     <p class="epigraph" lang="grc">πεσσοῖσι προπάροιθε θυράων θυμὸν ἔτερπον<span class="gloss">“… at <i>pessoi</i>, before the gates, they delighted their hearts.” — Homer, <span style="font-style:italic">Odyssey</span> 1.107 (the suitors, the game's oldest witness)</span></p>
-    <div class="tradition-tabs" role="group" aria-label="Tradition">
-      <button id="tab-greek"  aria-pressed="true">Petteia · the Greek game</button>
-      <button id="tab-roman"  aria-pressed="false">Latrunculi · Roman reception</button>
-    </div>
   </header>
 
   <div class="layout">
@@ -203,75 +250,140 @@
       <div class="turn"><span class="dot a" id="turn-dot"></span><span id="turn-text">Obsidian to place</span></div>
 
       <div class="tallies">
-        <div class="tally"><div class="n" id="ta">0</div><div class="k">obsidian taken</div></div>
-        <div class="tally"><div class="n" id="tb">0</div><div class="k">bone taken</div></div>
-      </div>
-
-      <div class="group">
-        <div class="legend">Opening</div>
-        <div class="seg" id="seg-setup" role="group" aria-label="Setup">
-          <button data-v="placement" aria-pressed="true">Placement</button>
-          <button data-v="array" aria-pressed="false">Opposed rows</button>
-        </div>
-        <div class="seg" id="seg-move" role="group" aria-label="Movement">
-          <button data-v="slide" aria-pressed="true">Slide</button>
-          <button data-v="step" aria-pressed="false">One step</button>
-        </div>
-      </div>
-
-      <div class="group">
-        <div class="legend">Capture & end</div>
-        <div class="row">
-          <label for="sw-corner">Corner capture <span class="src">Schädler</span></label>
-          <span class="sw"><input type="checkbox" id="sw-corner" checked><span></span></span>
-        </div>
-        <div class="row">
-          <label for="sw-free">Freeing the <i>incitus</i> <span class="src">Seneca</span></label>
-          <span class="sw"><input type="checkbox" id="sw-free"><span></span></span>
-        </div>
-        <div class="seg" id="seg-vic" role="group" aria-label="Victory">
-          <button data-v="both" aria-pressed="false">Either</button>
-          <button data-v="annihilate" aria-pressed="false">Capture</button>
-          <button data-v="blockade" aria-pressed="true">Blockade</button>
-        </div>
-      </div>
-
-      <div class="group">
-        <div class="legend">Table</div>
-        <div class="seg" id="seg-size" role="group" aria-label="Board size">
-          <button data-v="7" aria-pressed="true">7×7</button>
-          <button data-v="8" aria-pressed="false">8×8</button>
-          <button data-v="9" aria-pressed="false">9×9</button>
-        </div>
-        <div class="seg" id="seg-opp" role="group" aria-label="Opponent">
-          <button data-v="human" aria-pressed="true">Two players</button>
-          <button data-v="house" aria-pressed="false">vs the House</button>
-        </div>
-        <div id="house-opts" style="display:none">
-          <div class="legend" style="margin-top:.6rem">The House plays Pale</div>
-          <div class="seg" id="seg-level" role="group" aria-label="House difficulty">
-            <button data-v="random"  aria-pressed="false">Novice</button>
-            <button data-v="greedy"  aria-pressed="false">Raider</button>
-            <button data-v="search2" aria-pressed="true">Adept</button>
-            <button data-v="search3" aria-pressed="false">Master</button>
-          </div>
-          <div class="seg" id="seg-style" role="group" aria-label="House style">
-            <button data-v="aggressive" aria-pressed="true">Aggressive</button>
-            <button data-v="positional" aria-pressed="false">Positional</button>
-          </div>
-        </div>
+        <div class="tally"><div class="n" id="ta">0</div><div class="k" id="ka">dark taken</div></div>
+        <div class="tally"><div class="n" id="tb">0</div><div class="k" id="kb">pale taken</div></div>
       </div>
 
       <div class="actions">
         <button class="btn" id="new">New game</button>
         <button class="btn ghost" id="pass" title="Skip a forced-pass position">Pass</button>
+        <button id="music-toggle" aria-pressed="false" title="Ambient music" aria-label="Toggle ambient music">♪</button>
       </div>
-      <p class="status" id="status">Set the rules, then place your first piece.</p>
+      <button class="btn ghost optbtn" id="open-opts">⚙ Game options</button>
+      <p class="status" id="status">You move first. Click any empty cell to set a piece.</p>
 
       <p class="sources-note" id="srcnote"></p>
     </aside>
   </div>
 </div>
+
+<!-- Options screen — every rule/variant lives here, hidden until asked for, so a
+     newcomer meets a clean board, not a wall of switches. Changes apply live and
+     start a fresh game behind the overlay. -->
+<div id="options-screen" class="options-screen" hidden role="dialog" aria-modal="true" aria-label="Game options">
+  <div class="options-card">
+    <div class="options-head">
+      <h2>Game options</h2>
+      <button class="btn" id="close-opts">Done</button>
+    </div>
+
+    <div class="group" style="border-top:0;padding-top:0">
+      <div class="legend">Tradition</div>
+      <div class="seg" id="seg-trad" role="group" aria-label="Tradition">
+        <button id="tab-greek"  aria-pressed="true">Pessoi · Greek</button>
+        <button id="tab-roman"  aria-pressed="false">Ludus · Roman</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="legend">Who plays</div>
+      <div class="seg" id="seg-opp" role="group" aria-label="Opponent">
+        <button data-v="house" aria-pressed="true">vs the House</button>
+        <button data-v="human" aria-pressed="false">Two players</button>
+        <button data-v="watch" aria-pressed="false">Watch</button>
+      </div>
+      <div id="house-opts">
+        <div class="legend" style="margin-top:.6rem">The House plays Pale</div>
+        <div class="seg" id="seg-level" role="group" aria-label="House difficulty">
+          <button data-v="random"  aria-pressed="false">Novice</button>
+          <button data-v="greedy"  aria-pressed="false">Skirmisher</button>
+          <button data-v="search2" aria-pressed="true">Adept</button>
+          <button data-v="search3" aria-pressed="false">Master</button>
+        </div>
+        <div class="seg" id="seg-style" role="group" aria-label="House style">
+          <button data-v="raider"   aria-pressed="true">Raider</button>
+          <button data-v="polis"    aria-pressed="false">Polis-builder</button>
+          <button data-v="hamilcar" aria-pressed="false">Hamilcar</button>
+        </div>
+      </div>
+      <div id="watch-opts" style="display:none">
+        <div class="sidelegend"><span class="seldot a"></span>Obsidian bot</div>
+        <div class="seg" id="seg-blue-level" role="group" aria-label="Obsidian strength">
+          <button data-v="random">Novice</button>
+          <button data-v="greedy">Skirmisher</button>
+          <button data-v="search2" aria-pressed="true">Adept</button>
+          <button data-v="search3">Master</button>
+        </div>
+        <div class="seg" id="seg-blue-style" role="group" aria-label="Obsidian style">
+          <button data-v="raider">Raider</button>
+          <button data-v="polis" aria-pressed="true">Polis-builder</button>
+          <button data-v="hamilcar">Hamilcar</button>
+        </div>
+        <div class="sidelegend"><span class="seldot b"></span>Pale bot</div>
+        <div class="seg" id="seg-pale-level" role="group" aria-label="Pale strength">
+          <button data-v="random">Novice</button>
+          <button data-v="greedy">Skirmisher</button>
+          <button data-v="search2" aria-pressed="true">Adept</button>
+          <button data-v="search3">Master</button>
+        </div>
+        <div class="seg" id="seg-pale-style" role="group" aria-label="Pale style">
+          <button data-v="raider">Raider</button>
+          <button data-v="polis">Polis-builder</button>
+          <button data-v="hamilcar" aria-pressed="true">Hamilcar</button>
+        </div>
+        <div class="sidelegend">Watch speed</div>
+        <div class="seg" id="seg-speed" role="group" aria-label="Watch speed">
+          <button data-v="normal" aria-pressed="true">Normal</button>
+          <button data-v="fast">Fast</button>
+          <button data-v="turbo">Turbo</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="legend">Opening</div>
+      <div class="seg" id="seg-setup" role="group" aria-label="Setup">
+        <button data-v="placement" aria-pressed="true">Placement</button>
+        <button data-v="array" aria-pressed="false">Opposed rows</button>
+      </div>
+      <div class="seg" id="seg-move" role="group" aria-label="Movement">
+        <button data-v="slide" aria-pressed="true">Slide</button>
+        <button data-v="step" aria-pressed="false">One step</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="legend">Capture &amp; end</div>
+      <div class="row">
+        <label for="sw-corner">Corner capture <span class="src">Schädler</span></label>
+        <span class="sw"><input type="checkbox" id="sw-corner" checked><span></span></span>
+      </div>
+      <div class="row">
+        <label for="sw-free">Freeing the <i>incitus</i> <span class="src">Seneca</span></label>
+        <span class="sw"><input type="checkbox" id="sw-free"><span></span></span>
+      </div>
+      <div class="seg" id="seg-vic" role="group" aria-label="Victory">
+        <button data-v="both" aria-pressed="false">Either</button>
+        <button data-v="annihilate" aria-pressed="false">Capture</button>
+        <button data-v="blockade" aria-pressed="true">Blockade</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="legend">Table</div>
+      <div class="seg" id="seg-size" role="group" aria-label="Board size">
+        <button data-v="7" aria-pressed="true">7×7</button>
+        <button data-v="8" aria-pressed="false">8×8</button>
+        <button data-v="9" aria-pressed="false">9×9</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ambient music for Watch mode. preload=none (never delays first paint); starts
+     only on a user gesture (autoplay policy). Drop an ancient/Mediterranean track
+     at web/ambient.mp3 — until then the toggle is a graceful no-op. -->
+<audio id="bgm" src="ambient.mp3" loop preload="none"></audio>
 
 <script>
 "use strict";
@@ -284,8 +396,12 @@ const Rules = {
   tradition:"greek", W:7, H:7, pieces:12,
   setup:"placement", movement:"slide",
   corner:true, freeing:false, antiShuffle:true,
-  victory:"blockade", capRule:"material", minPieces:1, moveCap:400, opponent:"human",
-  houseLevel:"search2", houseStyle:"aggressive",
+  victory:"blockade", capRule:"material", minPieces:1, moveCap:400, opponent:"house",
+  houseLevel:"search2", houseStyle:"raider",
+  // Watch (cpu-vs-cpu): each side gets its own strength + personality.
+  blueLevel:"search2", blueStyle:"polis",
+  paleLevel:"search2", paleStyle:"hamilcar",
+  watchSpeed:"normal",
 };
 
 function makeGame(r){
@@ -414,12 +530,30 @@ function checkEnd(g){
  *  responsive.                                                        *
  * ------------------------------------------------------------------ */
 const WINV=1e6;
+/* Three coevolved personalities, named from this project's own scholarship —
+ * an identity no chess-knockoff has. Each is a weight vector over the eval
+ * features {mat, mob, mobdeny, ownlib, support, vuln, threat, centre, terr}.
+ * `terr` is the Go-style influence/territory term (the Hoshi bridge): net
+ * empty cells your pieces dominate — encirclement made measurable.
+ *   • Raider       — bloody, material- and capture-hungry (search.py material-first).
+ *   • Polis-builder— patient, territorial: connected central mass + space (search_v2).
+ *   • Hamilcar     — the blockader who "hems in and wins without a battle"
+ *                    (Polybius 1.84, our own find): strangle the foe's liberty.
+ * Tuned for ~50% cross-play so cpu-vs-cpu is fair AND visibly distinct. */
 const PERSONA={
-  // aggressive ≈ search.py material-first, with extra threat to seek captures
-  aggressive:{mat:100, mob:1,  mobdeny:0, ownlib:0, support:0, vuln:8, threat:12, centre:0.15},
-  // positional ≈ search_v2 blockade-aware: deny foe liberty, build support
-  positional:{mat:20,  mob:0,  mobdeny:4, ownlib:1, support:2, vuln:8, threat:6,  centre:0.15},
+  // Tuned by ~600 self-play games (JS round-robin). All three share one strong
+  // capture core (mat/threat/vuln) — captures decide this game, so a style that
+  // skimps on them just loses — and differ only in the cheap secondary terms that
+  // break ties among materially-equal moves. Cross-play ≈ Raider 63 / Hamilcar 52
+  // / Polis 36 %: the territorial Polis is the honest underdog, since territory
+  // rarely decides (FINDINGS-opening.md) — that's the game, not a tuning miss.
+  raider:   {mat:60, mob:1, mobdeny:0, ownlib:0, support:0, vuln:6, threat:11, centre:0.15, terr:0},
+  polis:    {mat:60, mob:2, mobdeny:0, ownlib:1, support:4, vuln:6, threat:11, centre:0.6,  terr:2.0},
+  hamilcar: {mat:60, mob:1, mobdeny:6, ownlib:0, support:1, vuln:6, threat:11, centre:0.15, terr:1.0},
+  // legacy aliases (older saved/linked configs) → nearest personality
+  aggressive:null, positional:null,
 };
+PERSONA.aggressive=PERSONA.raider; PERSONA.positional=PERSONA.polis;
 
 function cloneGame(g){
   return {r:g.r,W:g.W,H:g.H,board:g.board.slice(),frozen:new Map(g.frozen),
@@ -454,9 +588,22 @@ function evaluate(g,side,W){
     else{mat--; if(emptyN>0)foeMobBin++; foeLib+=emptyN;
       support-=friendN>0?1:-1; if(hb)threat++; centre+=dist;}
   }
+  // territory / influence: each empty cell goes to whoever has more pieces
+  // orthogonally adjacent to it. Net controlled space — the encirclement term.
+  let terr=0;
+  if(W.terr){
+    for(let i=0;i<b.length;i++){
+      if(b[i])continue;
+      const x=i%Wd, y=(i/Wd)|0; let own=0, foe2=0;
+      for(const[dx,dy]of ORTHO){const nx=x+dx,ny=y+dy;
+        if(nx>=0&&nx<Wd&&ny>=0&&ny<Hd){const c=b[ny*Wd+nx];
+          if(c===side)own++; else if(c===foe)foe2++;}}
+      if(own>foe2)terr++; else if(foe2>own)terr--;
+    }
+  }
   return W.mat*mat + W.mob*(ownMobBin-foeMobBin) - W.mobdeny*foeLib
        + W.ownlib*ownLib + W.support*support - W.vuln*vuln
-       + W.threat*threat + W.centre*centre;
+       + W.threat*threat + W.centre*centre + (W.terr||0)*terr;
 }
 
 function captureCount(g,f,t,p){
@@ -487,16 +634,26 @@ function negamax(g,depth,alpha,beta,W,budget){
   return best;
 }
 
-function placeHeuristic(g){            // central-cluster opening (cheap)
-  const cx=(g.W-1)/2, cy=(g.H-1)/2; let best=[],bs=1e18;
-  for(const m of legalMoves(g)){const[x,y]=XY(g,m[1]);
-    const d=Math.abs(x-cx)+Math.abs(y-cy);
-    if(d<bs){bs=d;best=[m];}else if(d===bs)best.push(m);}
-  return best[(Math.random()*best.length)|0];
+/* Opening book — baked from the self-play mining (FINDINGS-opening.md): petteia
+ * opening theory is "open in the centre and build a connected central mass" —
+ * the four central squares take ~90% of first drops, the core occupied 6–7× more
+ * than the edges. Rather than always snap to the single nearest cell (which makes
+ * every opening identical and dull to watch), we sample by an exp(-dist) weight:
+ * central squares dominate, but openings VARY — competent and watchable. */
+function bookPlace(g){
+  const cx=(g.W-1)/2, cy=(g.H-1)/2, moves=legalMoves(g);
+  if(!moves.length)return null;
+  const SCALE=1.35;                    // smaller = tighter to the centre
+  let total=0; const w=moves.map(m=>{const[x,y]=XY(g,m[1]);
+    const d=Math.abs(x-cx)+Math.abs(y-cy); const wt=Math.exp(-d/SCALE);
+    total+=wt; return wt;});
+  let r=Math.random()*total;
+  for(let i=0;i<moves.length;i++){r-=w[i]; if(r<=0)return moves[i];}
+  return moves[moves.length-1];
 }
 
 function searchMove(g,depth,W){
-  if(g.phase===0)return placeHeuristic(g);
+  if(g.phase===0)return bookPlace(g);
   const moves=legalMoves(g); if(!moves.length)return null;
   const budget={n:0,cap:24000}; let best=[],bv=-1e18;
   for(const m of orderMoves(g,moves)){
@@ -507,23 +664,24 @@ function searchMove(g,depth,W){
   return best[(Math.random()*best.length)|0];
 }
 
-/* Raider — 1-ply greedy (captures, else toward centre). The original House. */
+/* 1-ply greedy (captures, else toward centre). Opens from the book. */
 function greedyMove(g){
+  if(g.phase===0)return bookPlace(g);
   const moves=legalMoves(g); if(!moves.length)return null;
   const cx=(g.W-1)/2, cy=(g.H-1)/2; let best=[],bs=-1e9;
   for(const m of moves){
-    let s;
-    if(m[0]==="place"){const[x,y]=XY(g,m[1]);s=-(Math.abs(x-cx)+Math.abs(y-cy))*0.1;}
-    else{const[x,y]=XY(g,m[2]);
-      s=10*captureCount(g,m[1],m[2],g.toMove)-(Math.abs(x-cx)+Math.abs(y-cy))*0.05;}
+    const[x,y]=XY(g,m[2]);
+    const s=10*captureCount(g,m[1],m[2],g.toMove)-(Math.abs(x-cx)+Math.abs(y-cy))*0.05;
     if(s>bs){bs=s;best=[m];}else if(s===bs)best.push(m);
   }
   return best[(Math.random()*best.length)|0];
 }
 
-function houseMove(g){
-  const lvl=g.r.houseLevel||"search2";
-  const W=PERSONA[g.r.houseStyle]||PERSONA.aggressive;
+/* Pick a move for whichever side is to move, at the given strength + style.
+ * Drives both "vs the House" (one bot) and "Watch" (two bots). */
+function botMove(g,level,style){
+  const lvl=level||"search2";
+  const W=PERSONA[style]||PERSONA.raider;
   if(lvl==="random"){const m=legalMoves(g);return m.length?m[(Math.random()*m.length)|0]:null;}
   if(lvl==="greedy")return greedyMove(g);
   if(lvl==="search3")return searchMove(g,3,W);
@@ -541,7 +699,7 @@ const LABELS={
   roman:{
     placeName:"Distributio", placeNote:"Place your wandering pieces on any empty cell. The <i>vagi</i> cannot be taken while being set down.",
     moveName:"Manus", moveNote:"The <i>ordinarii</i> manoeuvre. Trap an enemy between two of your own to take it.",
-    a:"Obsidian", b:"Bone", caption:"after the Corbridge type"
+    a:"Garnet", b:"Ivory", caption:"after the Corbridge type"
   },
   greek:{
     placeName:"Thesis", placeNote:"Set your dogs (<i>kynes</i>) on the city. Nothing is taken during the setting-down.",
@@ -583,7 +741,7 @@ function render(){
     const sc=grid.children[g.selected]; if(sc)sc.classList.add("selected");
     for(const m of legalMoves(g))if(m[0]==="move"&&m[1]===g.selected)
       grid.children[m[2]].classList.add("legal");
-  } else if(g.phase===0 && g.result===null && !(g.r.opponent==="house"&&g.toMove===2)){
+  } else if(g.phase===0 && g.result===null && players[g.toMove]==="human"){
     for(const m of legalMoves(g))grid.children[m[1]].classList.add("legal");
   }
   // panel
@@ -596,6 +754,8 @@ function render(){
   $("turn-text").textContent=g.result!==null?"—":`${who} to ${placing?"place":"move"}`;
   $("ta").textContent=g.r.pieces-count(g,1);
   $("tb").textContent=g.r.pieces-count(g,2);
+  $("ka").textContent=`${L.a.toLowerCase()} taken`;
+  $("kb").textContent=`${L.b.toLowerCase()} taken`;
   $("lbl-left").textContent=`incised board · ${g.W} × ${g.H}`;
   $("lbl-right").textContent=L.caption;
   $("srcnote").innerHTML=srcNote();
@@ -614,23 +774,84 @@ function announceEnd(){
   setStatus(`${winner} wins — ${reason}.`,true);
 }
 
+/* ------------------------------------------------------------------ *
+ *  Who plays which seat + the bot loop (drives vs-House AND Watch).   *
+ * ------------------------------------------------------------------ */
+let players={1:"human",2:"human"};       // seat → "human" | "cpu"
+let moveSeq=0;                            // bumps to invalidate stale bot timeouts
+function syncPlayers(){
+  const o=g.r.opponent;
+  players = o==="watch" ? {1:"cpu",2:"cpu"}
+          : o==="house" ? {1:"human",2:"cpu"}
+          : {1:"human",2:"human"};
+}
+function cfgFor(side){
+  if(g.r.opponent==="watch")
+    return side===1 ? {level:g.r.blueLevel,style:g.r.blueStyle}
+                    : {level:g.r.paleLevel,style:g.r.paleStyle};
+  return {level:g.r.houseLevel,style:g.r.houseStyle};   // House occupies seat 2
+}
+const sideName=side=>side===1?LABELS[g.r.tradition].a:LABELS[g.r.tradition].b;
+const statusLine=()=>`${sideName(g.toMove)} to ${g.phase===0?"place":"move"}.`;
+const SPEED={normal:780,fast:280,turbo:55};
+function botThink(){ return g.r.opponent==="watch" ? (SPEED[g.r.watchSpeed]||780) : 360; }
+
+// the foe pieces a candidate move would capture, without committing it (for the flash)
+function capturedBy(g,m){
+  if(!m||m[0]!=="move")return [];
+  const before=g.board.slice(), foe=3-g.toMove;
+  const c=cloneGame(g); applyAction(c,m);
+  const caps=[];
+  for(let i=0;i<before.length;i++)
+    if(before[i]===foe && c.board[i]===0)caps.push(i);   // foe piece that vanished
+  return caps;
+}
+function flashCaptures(cells){
+  for(const i of cells){const cell=grid.children[i]; if(!cell)continue;
+    const fx=document.createElement("span"); fx.className="capflash";
+    cell.appendChild(fx); setTimeout(()=>fx.remove(),650);}
+}
+
 function afterMove(){
   render();
   if(g.result!==null){announceEnd();return;}
-  if(g.r.opponent==="house"&&g.toMove===2){
-    setStatus("The House considers…");
-    setTimeout(()=>{
-      const m=houseMove(g);
-      if(m){applyAction(g,m);} else {/* blockaded handled by checkEnd */}
-      render(); if(g.result!==null)announceEnd();
-      else setStatus(`${LABELS[g.r.tradition].a} to ${g.phase===0?"place":"move"}.`);
-    },260);
-  }
+  scheduleBot();
+}
+function scheduleBot(){
+  if(g.result!==null||players[g.toMove]!=="cpu")return;
+  const seq=++moveSeq, side=g.toMove;
+  setStatus(g.r.opponent==="watch" ? `${sideName(side)} is thinking…` : "The House considers…");
+  const t0=Date.now();
+  setTimeout(()=>{                                   // yield so the prior move paints first
+    if(seq!==moveSeq||g.result!==null||players[g.toMove]!=="cpu")return;
+    const {level,style}=cfgFor(side);
+    const m=botMove(g,level,style);                  // synchronous; fast on these depths
+    const wait=Math.max(0,botThink()-(Date.now()-t0));
+    const commit=()=>{
+      if(seq!==moveSeq||g.result!==null)return;
+      if(m){
+        g._pass=0; const caps=capturedBy(g,m); applyAction(g,m); render();
+        if(caps.length)flashCaptures(caps);
+      }else{                                           // no legal move: forced pass
+        g._pass=(g._pass||0)+1;
+        if(g._pass>=2)g.result=0;                      // both sides stuck ⇒ draw (no progress)
+        else{g.toMove=3-g.toMove; checkEnd(g);}
+        render();
+      }
+      if(g.result!==null){announceEnd();
+        if(g.r.opponent==="watch"){const s=moveSeq;        // keep the spectacle going
+          setTimeout(()=>{if(s===moveSeq)newGame();},2800);}
+        return;}
+      setStatus(statusLine());
+      scheduleBot();                                  // chain: one reply (House) or loop (Watch)
+    };
+    wait ? setTimeout(commit,wait) : commit();
+  },0);
 }
 
 grid.addEventListener("click",e=>{
   const cell=e.target.closest(".cell"); if(!cell||g.result!==null)return;
-  if(g.r.opponent==="house"&&g.toMove===2)return;
+  if(players[g.toMove]!=="human")return;
   const i=+cell.dataset.i;
   if(g.phase===0){
     if(g.board[i]===0){g.selected=null;applyAction(g,["place",i]);afterMove();}
@@ -658,7 +879,7 @@ function seg(id,key,after){
 seg("seg-setup","setup");
 seg("seg-move","movement");
 seg("seg-vic","victory");
-seg("seg-opp","opponent",v=>toggleHouseOpts(v==="house"));
+seg("seg-opp","opponent",toggleOppOpts);
 
 // difficulty & style: change live, WITHOUT resetting the game in progress
 function segNoReset(id,key){
@@ -670,7 +891,15 @@ function segNoReset(id,key){
 }
 segNoReset("seg-level","houseLevel");
 segNoReset("seg-style","houseStyle");
-const toggleHouseOpts=show=>{$("house-opts").style.display=show?"":"none";};
+segNoReset("seg-blue-level","blueLevel");
+segNoReset("seg-blue-style","blueStyle");
+segNoReset("seg-pale-level","paleLevel");
+segNoReset("seg-pale-style","paleStyle");
+segNoReset("seg-speed","watchSpeed");
+function toggleOppOpts(mode){
+  $("house-opts").style.display=mode==="house"?"":"none";
+  $("watch-opts").style.display=mode==="watch"?"":"none";
+}
 $("seg-size").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
   $("seg-size").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false"));
   b.setAttribute("aria-pressed","true");
@@ -687,6 +916,7 @@ $("pass").addEventListener("click",()=>{ // forced pass: hand turn over
 
 function setTradition(t){
   Rules.tradition=t;
+  document.body.classList.toggle("trad-roman",t==="roman");   // warm Roman skin
   $("tab-roman").setAttribute("aria-pressed",t==="roman");
   $("tab-greek").setAttribute("aria-pressed",t==="greek");
   // preset the reconstruction defaults from the document
@@ -701,19 +931,57 @@ function syncControls(){
   set("seg-vic",Rules.victory); set("seg-opp",Rules.opponent);
   set("seg-size",Rules.W);
   set("seg-level",Rules.houseLevel); set("seg-style",Rules.houseStyle);
-  toggleHouseOpts(Rules.opponent==="house");
+  set("seg-blue-level",Rules.blueLevel); set("seg-blue-style",Rules.blueStyle);
+  set("seg-pale-level",Rules.paleLevel); set("seg-pale-style",Rules.paleStyle);
+  set("seg-speed",Rules.watchSpeed);
+  toggleOppOpts(Rules.opponent);
   $("sw-corner").checked=Rules.corner; $("sw-free").checked=Rules.freeing;
 }
 $("tab-roman").addEventListener("click",()=>setTradition("roman"));
 $("tab-greek").addEventListener("click",()=>setTradition("greek"));
 
 function newGame(){
-  g=makeGame({...Rules}); render();
+  moveSeq++;                                   // cancel any running bot loop
+  g=makeGame({...Rules}); syncPlayers(); render();
   const L=LABELS[g.r.tradition];
-  setStatus(g.phase===0?`${L.a} places first. Click any empty cell.`:`${L.a} moves first.`);
+  if(g.r.opponent==="watch") setStatus(`${L.a} vs ${L.b} — watching.`);
+  else setStatus(g.phase===0?`${L.a} places first. Click any empty cell.`:`${L.a} moves first.`);
+  if(players[g.toMove]==="cpu") scheduleBot();  // Watch auto-starts; House seat-1 is human
 }
 
+/* ---- ambient music (Watch flourish) — off by default, starts on first gesture ---- */
+let MUSIC=(localStorage.getItem("pessoi_music")==="on");
+const BGM_VOL=0.3;
+function startMusic(){
+  const a=$("bgm"); if(!a||!a.paused)return;
+  a.volume=0; const p=a.play(); if(p&&p.catch)p.catch(()=>{});
+  let v=0; const id=setInterval(()=>{v=Math.min(BGM_VOL,v+0.04);a.volume=v;if(v>=BGM_VOL)clearInterval(id);},60);
+}
+function stopMusic(){const a=$("bgm");if(a)a.pause();}
+function syncMusicBtn(){$("music-toggle").setAttribute("aria-pressed",String(MUSIC));}
+$("music-toggle").addEventListener("click",()=>{
+  MUSIC=!MUSIC; localStorage.setItem("pessoi_music",MUSIC?"on":"off");
+  syncMusicBtn(); MUSIC?startMusic():stopMusic();
+});
+syncMusicBtn();
+
+/* ---- options screen: open / close (a clean board until asked for) ---- */
+const optScreen=$("options-screen");
+const openOpts=()=>{syncControls(); optScreen.hidden=false;};
+const closeOpts=()=>{optScreen.hidden=true;};
+$("open-opts").addEventListener("click",openOpts);
+$("close-opts").addEventListener("click",closeOpts);
+optScreen.addEventListener("click",e=>{if(e.target===optScreen)closeOpts();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!optScreen.hidden)closeOpts();});
+
 setTradition("greek");
+
+/* deep-link: play.html#watch (the landing "Watch the AI" CTA) opens straight into
+   the watch experience and starts the loop. */
+if(location.hash==="#watch"){
+  Rules.opponent="watch"; syncControls(); newGame();
+  if(MUSIC) startMusic();
+}
 </script>
 </body>
 </html>
