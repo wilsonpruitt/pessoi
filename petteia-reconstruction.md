@@ -40,7 +40,7 @@ So we anchor in **Petteia / Polis** and treat *Latrunculi* as its **Roman recept
 | **Polybius**, *Histories* 1.84.7–8 (on Hamilcar Barca) | 2nd c. BCE | Hamilcar destroyed the enemy "**without a battle**, hemming them in and cutting them off, **like a good *petteia*-player**." **Blockade**, not annihilation, as the model of victory. *(Widely misquoted as "Scipio"; corrected — §1C.)* |
 | **Pollux**, *Onomasticon* IX.97–98 | 2nd c. CE | **The keystone.** The board "played with many pieces," set in lines/cells, is called ***polis*** (city); each **piece is a *kyon*** (dog); pieces are **two colours**; the art is to take a piece "by **enclosing it between two**" of the other colour. (Also names "five-lines" as a *separate* game.) |
 
-**Caution on conflation.** The "five lines" (*pente grammai*) game is a **different**, partly race-based game; popular accounts fold it into petteia. Our *petteia* is specifically **Pollux's *polis***. **Setup and piece-count are nowhere stated**; the repeated "~30 pieces" is Murray's conjecture, not a source.
+**Caution on conflation.** The "five lines" (*pente grammai*) game is a **different**, partly race-based game; popular accounts fold it into petteia. Our *petteia* is specifically **Pollux's *polis*** — a distinction the sources themselves keep: Pollux describes five-lines apart from polis (IX.97), and Hesychius' *Lexicon* states outright that *petteia* differs from *kybeia* (dice-play). (Two later witnesses, Eustathius and Zenobius, independently confirm the *polis*/"dogs" naming — §1C, "Further witnesses.") **Setup and piece-count are nowhere stated**; the repeated "~30 pieces" is Murray's conjecture, not a source.
 
 ### 1B. The Roman reception — corroborating and illustrative witnesses
 
@@ -150,6 +150,33 @@ This single passage *fills the two Greek gaps* (§4) and corroborates a third th
 > *The counters (*calculi*) move partly in order, partly at random; so they call some "regular" (*ordinarii*), others "wandering" (*vagi*); but those that cannot be moved at all they call "stuck" (*inciti*). Whence even destitute men are called* inciti *— men for whom no hope of advancing further remains.*
 
 Late lexicography, but it pins three things the reconstruction uses. It records the Roman piece-vocabulary (*ordinarius*, *vagus*) the §4 variants draw on; and — the load-bearing point — it defines ***incitus*** as a piece that *cannot move at all* (*qui moveri omnino non possunt*), then carries the word straight into the metaphor of a person with **no move and no hope left**. That is *immobilisation = defeat* stated as plain idiom, and the root of the proverb *ad incitas redigere* ("to reduce to a standstill" = to beat utterly; the idiom itself is Plautine — *Poenulus* — and in Lucilius). This is the Latin tradition independently naming as its image-of-losing exactly what Plato's *ἀποκλείονται* names in Greek. **[Still to set in situ: Varro, *DLL* X.22 (the grid/declension analogy); Plautus, *Poenulus*, and Lucilius for the idiom itself; Seneca's *alligatus* (the contested "freeing" metaphor, §4).]**
+
+#### Further witnesses — corroborating the keystone
+
+*Pollux IX.98 is the keystone, but it is not alone. Three later or lexicographic witnesses independently confirm the two things most of the reconstruction hangs on — that the board is a* polis *and the pieces are "dogs," and that our game is a game of placement-and-position, not of dice. They are set down here with their references; the verbatim Greek is still to be set from the editions.*
+
+**Eustathius of Thessalonica, *Commentary on the Iliad* (on Il. Ψ.88)** — *polis* and "dogs," from a second hand.
+> [Greek to set from Eustathius, ed. — *Comm. ad Hom. Iliadem*, on Ψ.88]
+>
+> *…the spaces (of the board) are called* poleis *(cities) by the rule of the game, and the pieces that scheme against one another are called "dogs" (*kynes*).*
+
+A twelfth-century scholar, reading Homer, reaches independently for the same two technical terms Pollux gives — *polis* for the board, *kynes* for the pieces. Late, but it shows the vocabulary was not a one-off in Pollux: it was the standard way of naming this game. Direct corroboration of the keystone's D1/D2.
+
+**Zenobius, *Epitome of Proverbs* 5.67 (*πόλεις παίζειν*, "to play cities")** — the game-name, with a comic source.
+> [Greek to set from *Corpus Paroemiographorum Graecorum*, ed. Leutsch–Schneidewin, I.149]
+>
+> *"To play cities" (*poleis paizein*): Cratinus recalls it in the* Drapetides*. The* polis *is a kind of pessoi-game…*
+
+A proverb-collection independently records both the **name of the game** (playing *poleis*) and a fifth-century comic attestation (Cratinus). We already meet that Cratinus pun *inside* Pollux ("dog and city"); Zenobius confirms it from outside, and confirms that "playing cities" was a known idiom.
+
+**Hesychius of Alexandria, *Lexicon*** (s.v. *πεσσὰ πεντέγραμμα*) — petteia is not dice.
+> [Greek to set from Hesychius, ed. Latte / Hansen]
+>
+> *…petteia differs from* kybeia *(dice-play)…*
+
+The lexicographer draws the line our §1A caution depends on: *petteia* (the position-game) is a different thing from *kybeia* (dice). Backing, from a fourth witness, for not folding our game into the dice-and-race material — the same separation Pollux himself makes by treating "five-lines" apart (IX.97).
+
+*(The article that surfaced these — a board-game history compiling the petteia sources — also lists "Pollux VII.206" for the five-lines among dice games; in the Dindorf text that material sits at* IX.97*, already noted above, so we do not cite it separately.)*
 
 ---
 
