@@ -1,1099 +1,601 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Pessoi — the reconstruction</title>
-  <style>
-    /* Default styles provided by pandoc.
-    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-    */
-    html {
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      overflow-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 12px;
-      }
-      h1 {
-        font-size: 1.8em;
-      }
-    }
-    @media print {
-      html {
-        background-color: white;
-      }
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    svg {
-      height: auto;
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
-      font-size: 85%;
-      margin: 0;
-      hyphens: manual;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-      overflow-wrap: normal;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      border: none;
-      border-top: 1px solid #1a1a1a;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC ul {
-      padding-left: 1.3em;
-    }
-    #TOC > ul {
-      padding-left: 0;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    /* The extra [class] is a hack that increases specificity enough to
-       override a similar rule in reveal.js */
-    ul.task-list[class]{list-style: none;}
-    ul.task-list li input[type="checkbox"] {
-      font-size: inherit;
-      width: 0.8em;
-      margin: 0 0.8em 0.2em -1.6em;
-      vertical-align: middle;
-    }
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
-  <meta name="description" content="The primary-source reconstruction behind Pessoi — the ancient Greek game later called petteia or polis, built up from Homer, Plato, Aristotle, Polybius, Pollux, and the Roman ludus latrunculorum. Every rule graded A / I / D." />
-  <meta property="og:title" content="Pessoi — the reconstruction" />
-  <meta property="og:description" content="The primary-source reconstruction behind Pessoi: every rule graded attested / inferred / design, settled by a tested engine and self-play." />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://pessoi.com/reconstruction" />
-  <meta property="og:image" content="https://pessoi.com/og.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://pessoi.com/og.png" />
-  <link rel="icon" href="favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --limestone:#b3a991; --paper:#c9c0a9; --ink:#2c2719; --ink-soft:#5d5440;
-      --slab:#4c5044; --pale:#e9dfc6; --verdigris:#5d9180; --verdigris-d:#467263;
-      --line:#8d836b; --danger:#9a5a3c; --radius:3px;
-    }
-    *{box-sizing:border-box}
-    html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-    /* override pandoc's default template CSS (it pins body to max-width:36em/auto) */
-    html{font-size:16px}
-    body{margin:0!important;max-width:none!important;padding:0!important;color:var(--ink);
-      background:var(--limestone);font-family:"IBM Plex Sans",system-ui,sans-serif;
-      line-height:1.62;font-size:16px;
-      background-image:radial-gradient(circle at 18% 0%,rgba(255,255,255,.05),transparent 40%);}
-    /* top nav */
-    .topnav{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:14px;
-      background:rgba(20,22,17,.94);backdrop-filter:blur(4px);border-bottom:1px solid #000;
-      padding:11px clamp(16px,4vw,32px)}
-    .topnav .brand{font-family:"Fraunces",serif;font-weight:600;font-size:20px;color:var(--pale);
-      text-decoration:none;letter-spacing:.01em}
-    .topnav .brand:hover{color:#fff}
-    .topnav .grc{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.22em;
-      color:var(--verdigris);text-transform:uppercase}
-    .topnav .play{margin-left:auto;font:600 13px/1 "IBM Plex Sans";text-decoration:none;
-      background:var(--verdigris);color:#10231d;padding:9px 16px;border-radius:var(--radius)}
-    .topnav .play:hover{background:#6aa492}
-    /* reading column */
-    main{max-width:760px;margin:0 auto;padding:clamp(28px,5vw,56px) clamp(18px,4vw,28px) 72px}
-    main h1{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(30px,5vw,46px);
-      line-height:1.08;margin:.2em 0 .15em;color:var(--ink)}
-    main h2{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(22px,3.4vw,30px);
-      margin:1.7em 0 .4em;padding-top:.5em;border-top:1px solid var(--line);color:var(--ink)}
-    main h3{font-family:"Fraunces",serif;font-weight:600;font-size:19px;margin:1.4em 0 .3em;color:var(--ink)}
-    main h4{font-family:"IBM Plex Sans";font-weight:600;font-size:15px;letter-spacing:.02em;margin:1.2em 0 .2em}
-    main p{margin:0 0 1em}
-    main a{color:var(--verdigris-d);text-decoration:underline;text-underline-offset:2px}
-    main a:hover{color:var(--ink)}
-    main strong{color:var(--ink)}
-    main em{font-style:italic}
-    main ul,main ol{margin:0 0 1em;padding-left:1.3em}
-    main li{margin:.25em 0}
-    main hr{border:0;border-top:1px solid var(--line);margin:2em 0}
-    main blockquote{margin:1.2em 0;padding:.4em 0 .4em 16px;border-left:3px solid var(--verdigris-d);
-      color:var(--ink-soft);font-style:italic}
-    main blockquote p{margin:.3em 0}
-    main code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:rgba(0,0,0,.06);
-      padding:1px 5px;border-radius:3px}
-    main pre{background:var(--slab);color:var(--pale);padding:14px 16px;border-radius:var(--radius);
-      overflow:auto;font-size:13px;line-height:1.5}
-    main pre code{background:none;padding:0;color:inherit}
-    main table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
-    main th,main td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
-    main th{background:rgba(0,0,0,.06);font-weight:600;font-family:"IBM Plex Sans"}
-    main tr:nth-child(even) td{background:rgba(0,0,0,.025)}
-    main :is(h1,h2,h3)[lang="grc"], main [lang="grc"]{font-family:"Fraunces",Georgia,serif}
-    .recon-foot{border-top:1px solid var(--line);margin-top:48px;padding-top:20px;
-      font:400 13px/1.7 "IBM Plex Mono",monospace;color:var(--ink-soft)}
-    .recon-foot a{color:var(--verdigris-d)}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pessoi — the reconstruction (the ancient Greek game, from the sources up)</title>
+<meta name="description" content="The primary-source reconstruction behind Pessoi: how the ancient Greek game later called petteia or polis is rebuilt from Homer, Plato, Aristotle, Polybius, and Pollux — with Ludus Latrunculorum as its Roman reception. Every rule graded by how well the sources support it." />
+<meta property="og:title" content="Pessoi — the reconstruction" />
+<meta property="og:description" content="Built up from the ancient evidence, not down from a modern rulebook. The sources, the inferences, and the rules they license — graded throughout." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pessoi.com/reconstruction" />
+<meta property="og:image" content="https://pessoi.com/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Pessoi — the reconstruction" />
+<meta name="twitter:description" content="The ancient Greek game, rebuilt from Homer to Pollux and graded by attestation." />
+<meta name="twitter:image" content="https://pessoi.com/og.png" />
+<link rel="icon" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --limestone:#b3a991; --limestone-d:#a59a80;
+    --slab:#4c5044; --slab-cell:#545848; --slab-cell-d:#474b3c;
+    --incise:#24271d; --incise-hi:#6b6f5d;
+    --ink:#2c2719; --ink-soft:#5d5440;
+    --pale:#e9dfc6; --verdigris:#5d9180; --verdigris-d:#467263;
+    --bone:#e7ddc4; --bone-sh:#b6ab8c;
+    --line:#8d836b; --danger:#9a5a3c; --radius:3px;
+    /* reading surface — a touch lighter than the limestone pillars, for long text */
+    --parch:#d9cfb6; --parch-card:#cfc4a8; --rule:#bdb299;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{margin:0;color:var(--pale);background:#191d18;
+    font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.5;}
+  .wrap{max-width:1000px;margin:0 auto;padding:clamp(20px,4vw,40px)}
+  a{color:inherit}
+  .mono{font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--verdigris)}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid #000;
+    background:
+      radial-gradient(circle at 80% 16%, rgba(93,145,128,.16), transparent 46%),
+      radial-gradient(circle at 10% 96%, rgba(0,0,0,.4), transparent 50%),
+      linear-gradient(160deg,#20251f,#14140f);}
+  .hero .wrap{padding-top:clamp(26px,5vw,52px);padding-bottom:clamp(30px,5vw,56px)}
+  .brandline{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:26px}
+  .brandline .grc{font-family:"Fraunces",serif;font-size:18px;color:var(--bone);letter-spacing:.16em;
+    text-decoration:none}
+  .brandline .by{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:11px;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);}
+  .brandline .by a{color:var(--limestone);text-decoration:none;border-bottom:1px solid #5d544066}
+  h1.title{font-family:"Fraunces",serif;font-weight:600;
+    font-size:clamp(30px,5.4vw,56px);line-height:1.04;letter-spacing:.005em;
+    margin:0 0 16px;color:var(--bone);max-width:18ch}
+  h1.title em{font-style:italic;color:var(--verdigris)}
+  .standfirst{font-size:clamp(15px,2vw,18px);max-width:62ch;color:#d6ccb4;margin:0 0 22px}
+  .namebox{font-family:"Fraunces",serif;font-size:15px;line-height:1.6;color:var(--limestone);
+    max-width:64ch;border-left:2px solid var(--verdigris-d);padding:2px 0 2px 16px;margin:0 0 26px}
+  .namebox b{color:var(--bone);font-weight:600}
+  .namebox .grc{font-style:normal}
+  .herometa{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-family:"IBM Plex Mono",monospace;
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+  .herometa a{color:var(--limestone);text-decoration:none;border-bottom:1px solid #5d544066;padding-bottom:1px}
+  .herometa a:hover{color:var(--verdigris)}
+  .herometa .play{color:var(--verdigris);border-color:var(--verdigris-d)}
+
+  /* ---------- reading surface ---------- */
+  main{background:var(--parch);color:var(--ink);
+    background-image:radial-gradient(circle at 18% -4%, rgba(255,255,255,.05),transparent 42%)}
+  .doc{max-width:760px;margin:0 auto;padding:clamp(26px,5vw,56px) clamp(18px,4vw,40px) 8px}
+  .doc p{margin:1.05em 0;font-size:16px}
+  .doc h2{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(23px,3.2vw,31px);
+    line-height:1.12;color:var(--ink);margin:0 0 4px;scroll-margin-top:14px}
+  .doc h2 .num{color:var(--verdigris-d);font-weight:500;margin-right:.5ch}
+  .doc h3{font-family:"Fraunces",serif;font-weight:600;font-size:19px;color:var(--ink);
+    margin:34px 0 2px;scroll-margin-top:14px}
+  .doc h4{font-family:"IBM Plex Sans";font-weight:600;font-size:15.5px;color:var(--ink);margin:24px 0 2px}
+  .sectlede{color:var(--ink-soft);font-style:italic;max-width:60ch;margin:2px 0 18px}
+  .doc a[href^="#"]{color:var(--verdigris-d);text-decoration:none;border-bottom:1px solid #46726344}
+  .doc a[href^="#"]:hover{border-bottom-color:var(--verdigris-d)}
+  .doc strong{color:#211d12}
+  .doc em{color:#3a3324}
+  .doc hr{border:0;border-top:1px solid var(--rule);margin:40px 0}
+  .doc .lat,.doc .grc{font-style:italic}
+
+  /* grade tags */
+  .tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-style:normal;
+    border:1px solid var(--verdigris-d);border-radius:3px;padding:0 5px;color:var(--verdigris-d);
+    letter-spacing:.06em;vertical-align:1px;white-space:nowrap}
+  .tag.d{border-color:#9a7b4c;color:#8a6a3c}
+  .tag.i{border-color:#6f7a86;color:#5b6470}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 4px}
+  .legend .item{flex:1 1 200px;background:var(--parch-card);border:1px solid var(--rule);border-radius:4px;
+    padding:12px 14px;font-size:13.5px;color:var(--ink-soft)}
+  .legend .item b{color:var(--ink);font-weight:600}
+
+  /* table of contents */
+  .toc{background:var(--parch-card);border:1px solid var(--rule);border-radius:5px;
+    padding:18px 22px;margin:26px 0 8px}
+  .toc .h{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--verdigris-d);margin-bottom:10px}
+  .toc ol{margin:0;padding:0;list-style:none;columns:2;column-gap:30px}
+  @media(max-width:620px){.toc ol{columns:1}}
+  .toc li{margin:0 0 7px;font-size:14px;break-inside:avoid}
+  .toc a{text-decoration:none;color:var(--ink);border-bottom:1px solid transparent}
+  .toc a:hover{border-bottom-color:var(--verdigris-d);color:var(--verdigris-d)}
+  .toc .n{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--verdigris-d);margin-right:7px}
+
+  /* dossier tables */
+  .tablewrap{overflow-x:auto;margin:18px 0;border:1px solid var(--rule);border-radius:5px}
+  table.dossier{border-collapse:collapse;width:100%;font-size:13.5px;min-width:540px;background:var(--parch-card)}
+  table.dossier th,table.dossier td{text-align:left;vertical-align:top;padding:9px 13px;border-bottom:1px solid var(--rule)}
+  table.dossier thead th{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--verdigris-d);background:#c7bb9e}
+  table.dossier tr:last-child td{border-bottom:0}
+  table.dossier td:first-child{white-space:nowrap;font-weight:600;color:var(--ink)}
+  table.dossier .date{color:var(--ink-soft);white-space:nowrap}
+
+  /* witness blocks */
+  .witness{margin:22px 0;border:1px solid var(--rule);border-left:3px solid var(--verdigris-d);
+    border-radius:4px;background:var(--parch-card);overflow:hidden}
+  .witness .head{padding:11px 16px 9px;border-bottom:1px solid var(--rule);background:#c7bb9e}
+  .witness .head .src{font-family:"Fraunces",serif;font-weight:600;font-size:15.5px;color:var(--ink)}
+  .witness .head .gloss-cite{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-soft);
+    letter-spacing:.03em;display:block;margin-top:3px}
+  .witness .body{padding:13px 16px}
+  .witness .orig{font-family:"Fraunces",serif;font-size:15px;line-height:1.66;color:#2a2519;margin:0 0 10px}
+  .witness .orig.lat{font-style:italic}
+  .witness .trans{font-size:14.5px;line-height:1.6;color:var(--ink);margin:0}
+  .witness .trans .term{font-style:italic;color:#3a3324}
+  .witness .commentary{padding:12px 16px 14px;border-top:1px dashed var(--rule);font-size:14px;color:var(--ink-soft)}
+  .witness .commentary p{margin:.5em 0;font-size:14px}
+  .witness .commentary ul{margin:.4em 0;padding-left:20px}
+  .witness .commentary li{margin:.45em 0}
+  .paraphrase .orig{font-style:italic;color:var(--ink-soft);font-size:14.5px}
+
+  /* caution / reader notes */
+  .note{margin:20px 0;background:#cdbf9d;border:1px solid var(--rule);border-radius:4px;
+    padding:14px 17px;font-size:14px;color:var(--ink-soft)}
+  .note .lab{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--danger);display:block;margin-bottom:5px}
+  .note.fact .lab{color:var(--verdigris-d)}
+  .note b{color:var(--ink)}
+
+  /* numbered rule lists (§2, §3 victory) */
+  .doc ol.rules{margin:14px 0;padding-left:0;list-style:none;counter-reset:r}
+  .doc ol.rules>li{position:relative;padding:0 0 0 38px;margin:13px 0;counter-increment:r;font-size:15px}
+  .doc ol.rules>li::before{content:counter(r);position:absolute;left:0;top:0;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--verdigris-d);
+    border:1px solid var(--rule);border-radius:3px;width:24px;height:24px;display:flex;
+    align-items:center;justify-content:center;background:var(--parch-card)}
+  .ruleblock{margin:16px 0}
+  .ruleblock h4{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  .ruleblock h4 .t{font-family:"Fraunces",serif;font-weight:600;font-size:17px}
+
+  /* footer */
+  footer{background:#14140f;color:var(--ink-soft);font-size:13px}
+  footer .wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center;padding-top:26px;padding-bottom:34px}
+  footer a{color:var(--limestone);text-decoration:none;border-bottom:1px solid #5d544055}
+  footer a:hover{color:var(--verdigris)}
+  footer .sep{color:#3a3a30}
+  footer .right{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em}
+  .backtotop{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+</style>
 </head>
 <body>
-<nav class="topnav">
-  <a class="brand" href="/">Pessoi</a>
-  <span class="grc" lang="grc">ΠΕΣΣΟΙ · the reconstruction</span>
-  <a class="play" href="/play">▶ Play</a>
-</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="brandline">
+      <a class="grc" href="/" lang="grc">ΠΕΣΣΟΙ</a>
+      <span class="eyebrow">The reconstruction</span>
+      <span class="by">a <a href="https://games.wrootlabs.com">Wroot&nbsp;Labs</a> game</span>
+    </div>
+
+    <h1 class="title">Reconstructing the Greek game, from the <em>sources up</em></h1>
+
+    <p class="standfirst">A primary-source reconstruction of the ancient game later called <i>petteia</i> or <i>polis</i> — built up from the ancient evidence rather than down from the modern rulesets (Bell, Schädler, Murray). Every rule is graded by how well the sources support it, and the genuinely open choices were settled by a tested engine, not by assertion.</p>
+
+    <p class="namebox"><b>The game you play is <span class="grc" lang="grc">Pessoi</span></b> (PESS-oy) — after the counters (<span lang="grc">πεσσοί</span>) the suitors are playing in the game's oldest witness, Homer's <i>Odyssey</i> 1.107. The historical terms <i>petteia</i>, <i>polis</i>, and <i>latrunculi</i> are kept throughout the analysis below, where they belong to the scholarship; <i>Pessoi</i> is simply the name of the game as it is published and played.</p>
+
+    <div class="herometa">
+      <a class="play" href="/play">▶ Play Pessoi</a>
+      <span>·</span>
+      <a href="/">Home</a>
+      <span>·</span>
+      <span>Working draft v0.3</span>
+    </div>
+  </div>
+</header>
+
 <main>
-<h1 id="reconstructing-petteia-polis">Reconstructing <em>Petteia</em> /
-<em>Polis</em></h1>
-<h3
-id="the-greek-game-with-ludus-latrunculorum-as-its-roman-reception">the
-Greek game — with <em>Ludus Latrunculorum</em> as its Roman
-reception</h3>
-<p><em>A primary-source reconstruction, built up from the ancient
-evidence rather than down from the modern rulesets (Bell, Schädler,
-Murray). Working draft <strong>v0.3</strong> — collapsed from two
-parallel reconstructions to one canonical game.</em></p>
-<blockquote>
-<p><strong>The playable edition of this reconstruction is named
-<em>Pessoi</em></strong> (PESS-oy) — after the counters (πεσσοί) the
-suitors are playing in the game’s oldest witness, Homer,
-<em>Odyssey</em> 1.107. The historical terms <em>petteia</em>,
-<em>polis</em>, and <em>latrunculi</em> are retained throughout the
-analysis below; <em>Pessoi</em> is the name of the game as you play
-it.</p>
-</blockquote>
-<hr />
-<h2 id="method-and-why-one-game">0. Method, and why one game</h2>
-<p>No complete rulebook survives. Every reconstruction is a chain of
-inferences, and the honest work is marking where each link is iron and
-where it is wire. Every rule below carries a tag:</p>
-<ul>
-<li><strong>[A] Attested</strong> — stated or unambiguously implied by
-an ancient source. Not ours to overrule.</li>
-<li><strong>[I] Inferred</strong> — not stated, but strongly constrained
-by the sources plus the behaviour of the wider custodial-capture family
-(Seega, <em>tafl</em>, Kharebga). A scholar may dissent, but bears the
-burden.</li>
-<li><strong>[D] Design choice</strong> — genuinely underdetermined. We
-pick to produce a playable game and say so. These are the rules the
-engine <em>tests</em> rather than asserts (§6).</li>
-</ul>
-<p>Two standing commitments: <strong>primary sources outrank secondary
-reconstructions</strong> (where Bell or Schädler assert what the texts
-do not license, we drop it — §5); and <strong>we import nothing from a
-cousin game</strong> except as a tiebreaker where the sources are
-silent.</p>
-<h3 id="why-we-reconstruct-one-game-not-two">Why we reconstruct one
-game, not two</h3>
-<p>An earlier draft built <em>Latrunculi</em> and <em>Petteia</em> as
-parallel reconstructions. Carried out honestly, they converged: once the
-unwarranted accretions are stripped, two equal-army custodial-capture
-games on a grid have nothing left to keep them apart. The historical
-record cannot sustain a stable difference, and the reception history
-proves the danger — every attempt to <em>differentiate</em> the Roman
-game (Bell’s “Dux,” the leaping king of the popular rule-sheets, a
-checkmate-style win) pulls it toward chess, while every attempt to keep
-the two distinct without such accretions collapses them back together.
-Two failure modes, one cause: there is only one game here.</p>
-<p>So we anchor in <strong>Petteia / Polis</strong> and treat
-<em>Latrunculi</em> as its <strong>Roman reception</strong> (§4). The
-reasons are structural, not sentimental. The Greek game is the
-<strong>drift-resistant</strong> one: its conceptual core is more
-completely attested (board, pieces, capture, <em>and</em> victory are
-all Greek-fixed), and its defining feature — victory by
-<strong>immobilisation</strong> — is the one idea that <em>cannot</em>
-slide into chess, because blockade is the opposite of checkmate. The
-Roman game can be built clean, but only by continuously overriding its
-own reception; the Greek game is clean by nature.</p>
-<p><strong>On “reception.”</strong> We do not claim a documented line of
-transmission — the evidence for <em>direct</em> Greek-to-Roman descent
-is sparse. We claim only the parsimonious reading: once anachronisms are
-bracketed out, the Roman material is most economically understood as the
-same game received into Latin culture and re-dressed, rather than as an
-independent invention that happens to share every structural feature.
-Latrunculi is conventionally “believed to be a variant of the earlier
-Greek game”; Schädler grants that <em>polis</em> and <em>latrunculi</em>
-are “largely the same.” Reception is held here as the <strong>most
-economical hypothesis</strong>, flagged as such, not as fact.</p>
-<hr />
-<h2 id="the-evidence-dossier">1. The evidence dossier</h2>
-<h3 id="a.-the-greek-game-the-canonical-witnesses">1A. The Greek game —
-the canonical witnesses</h3>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th>Source</th>
-<th>Date</th>
-<th>What it actually fixes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Homer</strong>, <em>Odyssey</em> 1.107</td>
-<td>8th c. BCE</td>
-<td>The suitors play <em>pessoi</em>. Existence only — no
-mechanics.</td>
-</tr>
-<tr>
-<td><strong>Plato</strong>, <em>Republic</em> 487b–c</td>
-<td>4th c. BCE</td>
-<td>The weak player is “<strong>shut in and unable to move</strong>” by
-the skilled. Fixes <strong>immobilisation/blockade as a decisive
-condition</strong>, not merely material capture.</td>
-</tr>
-<tr>
-<td><strong>Plato</strong>, <em>Phaedrus</em> 274c–d</td>
-<td>4th c. BCE</td>
-<td><em>Petteia</em> among Theuth’s Egyptian inventions → a claimed
-pedigree; groups <em>petteia</em> with dice-games as separate
-things.</td>
-</tr>
-<tr>
-<td><strong>Aristotle</strong>, <em>Politics</em> 1253a</td>
-<td>4th c. BCE</td>
-<td>The stateless man is <em>azux</em> — an “<strong>unpaired
-piece</strong> in <em>petteia</em>.” Confirms <strong>isolation =
-vulnerability</strong>, support = strength.</td>
-</tr>
-<tr>
-<td><strong>Polybius</strong>, <em>Histories</em> 1.84.7–8 (on Hamilcar
-Barca)</td>
-<td>2nd c. BCE</td>
-<td>Hamilcar destroyed the enemy “<strong>without a battle</strong>,
-hemming them in and cutting them off, <strong>like a good
-<em>petteia</em>-player</strong>.” <strong>Blockade</strong>, not
-annihilation, as the model of victory. <em>(Widely misquoted as
-“Scipio”; corrected — §1C.)</em></td>
-</tr>
-<tr>
-<td><strong>Pollux</strong>, <em>Onomasticon</em> IX.97–98</td>
-<td>2nd c. CE</td>
-<td><strong>The keystone.</strong> The board “played with many pieces,”
-set in lines/cells, is called <strong><em>polis</em></strong> (city);
-each <strong>piece is a <em>kyon</em></strong> (dog); pieces are
-<strong>two colours</strong>; the art is to take a piece “by
-<strong>enclosing it between two</strong>” of the other colour. (Also
-names “five-lines” as a <em>separate</em> game.)</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Caution on conflation.</strong> The “five lines” (<em>pente
-grammai</em>) game is a <strong>different</strong>, partly race-based
-game; popular accounts fold it into petteia. Our <em>petteia</em> is
-specifically <strong>Pollux’s <em>polis</em></strong> — a distinction
-the sources themselves keep: Pollux describes five-lines apart from
-polis (IX.97), and Hesychius’ <em>Lexicon</em> states outright that
-<em>petteia</em> differs from <em>kybeia</em> (dice-play). (Two later
-witnesses, Eustathius and Zenobius, independently confirm the
-<em>polis</em>/“dogs” naming — §1C, “Further witnesses.”) <strong>Setup
-and piece-count are nowhere stated</strong>; the repeated “~30 pieces”
-is Murray’s conjecture, not a source.</p>
-<h3
-id="b.-the-roman-reception-corroborating-and-illustrative-witnesses">1B.
-The Roman reception — corroborating and illustrative witnesses</h3>
-<p>The Latin sources are read here not as a <em>rival</em> game’s
-evidence but as the receiving tradition’s testimony to the same game —
-and, crucially, as the place where two questions the Greek record leaves
-open are answered in practice.</p>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th>Source</th>
-<th>Date</th>
-<th>What it adds to the same game</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Varro</strong>, <em>De Lingua Latina</em> X.22</td>
-<td>1st c. BCE</td>
-<td>The board is a <strong>grid of cells</strong> (compared to a
-declension table). Corroborates Pollux’s board.</td>
-</tr>
-<tr>
-<td><strong>Ovid</strong>, <em>Ars Am.</em> III.357–360;
-<em>Tristia</em> II.477</td>
-<td>c. 1 BCE–8 CE</td>
-<td><strong>Custodial capture</strong> — a piece caught “between twin
-foes” perishes. Independent Latin confirmation of Pollux’s enclosure
-rule.</td>
-</tr>
-<tr>
-<td><strong>Martial</strong>, <em>Epigrams</em> XIV.17</td>
-<td>c. 85 CE</td>
-<td>Pieces are <em>latrones</em> (soldier-pieces); two colours in
-opposition; capture by being caught.</td>
-</tr>
-<tr>
-<td><strong>Laus Pisonis</strong> 190–208</td>
-<td>1st c. CE</td>
-<td>The richest gameplay source either tradition has. Glass soldiers
-(<em>vitreo milite</em>); pieces <strong>distributed cleverly on the
-open board</strong> (<em>…tabula… aperta</em>) → supplies the
-<strong>placement</strong> opening; pieces <strong>retreat yet capture
-the pursuer</strong>; a <strong>reserve</strong> re-enters; one
-“seemingly checked itself checks two”; play that <strong>breaks the
-line</strong> → supplies the <strong>slide/burst-through</strong>
-movement.</td>
-</tr>
-<tr>
-<td><strong>Seneca</strong> (metaphor, <em>alligatus</em>)</td>
-<td>c. 65 CE</td>
-<td>Read by Schädler as implying <strong>delayed removal /
-freeing</strong> of a trapped piece. Interpretive, not explicit — and
-treated here as a <em>possible Roman accretion</em>, not canonical (§4,
-§5).</td>
-</tr>
-<tr>
-<td><strong>Isidore</strong>, <em>Etymologiae</em> XVIII</td>
-<td>7th c. CE</td>
-<td>Late lexicography: the terms <em>vagus</em> (wanderer),
-<em>ordinarius</em> (regular), <em>incitus</em> (immobilised). The idiom
-<em>ad incitas redigere</em> (“reduced to immobility” = beaten)
-independently echoes the blockade victory from the Latin side.</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Archaeology.</strong> Boards survive at 7×7, 7×8, 8×8, 9×9,
-9×10; bone/glass/pottery counters, uniform and distinguished only by
-colour (the Perugia hoard, the British Museum sets); the Vindolanda and
-Corbridge boards. The <strong>Stanway grave</strong> (Colchester, c. 50
-CE) — rectangular (~2:3), possibly un-latticed — is the sole basis for
-the “Dux” theory and is plausibly a <em>different</em> (native British)
-game; we set it aside (§5).</p>
-<p><strong>Computational check (Crist, Piette, Soemers, Stephenson &amp;
-Browne, 2024, via Ludii).</strong> Independent support for two of our
-calls: <strong>slide movement</strong> is playable and
-source-consistent; the <strong>large rectangular boards</strong> (8×12
-Colchester-type) <strong>stall out</strong> under every custodial
-ruleset — evidence they were a different game, and that the real game
-lived on the squarer 7×8–9×9 boards.</p>
-<h3 id="c.-the-witnesses-in-their-own-words">1C. The witnesses in their
-own words</h3>
-<p><em>The tables above say what each source</em> fixes<em>; here is the
-source itself. A reconstruction that grades its rules by attestation
-owes the reader the attested words, not just a citation to
-chase.</em></p>
-<blockquote>
-<p><strong>Editorial note.</strong> Several passages are now set from
-the editions and verified against the page: <strong>Pollux
-IX.98</strong> (Dindorf, Leipzig 1824), <strong>Plato <em>Republic</em>
-487b–c</strong> (Loeb/Shorey), the <strong>Laus Pisonis</strong>
-(Loeb/Duff, <em>Minor Latin Poets</em>), and <strong>Isidore
-XVIII.67</strong> (Lindsay’s <em>OCT</em>, 1911) — each marked at its
-head. The rest remain a <strong>working transcription</strong> to be
-<strong>proofed before publication</strong> against the Loeb facing
-texts (Homer; Plato <em>Phaedrus</em>; Aristotle <em>Politics</em> — the
-last confirmed against Perseus; Ovid; Martial). The original languages
-are public domain and may be set freely; the <strong>English is fresh
-(Wroot Press) and open to revision</strong> — literal rather than
-literary, so the technical vocabulary (<em>pessoi</em>, <em>kyon</em>,
-<em>calculus</em>, <em>latro</em>) shows through. Where a passage is
-quoted only in part by a later source, or its wording is still to be
-set, this is marked <strong>[text to source]</strong>.</p>
-</blockquote>
-<h4 id="the-greek-game">The Greek game</h4>
-<p><strong>Homer, <em>Odyssey</em> 1.106–107</strong> — the oldest
-witness. &gt; πεσσοῖσι προπάροιθε θυράων θυμὸν ἔτερπον, / ἥμενοι ἐν
-ῥινοῖσι βοῶν, οὓς ἔκτανον αὐτοί. &gt; &gt; <em>…before the doors they
-[the suitors] were delighting their hearts with</em> pessoi<em>, seated
-on the hides of oxen they had themselves slaughtered.</em></p>
-<p>The game exists by the eighth century and needs no gloss — Homer can
-name <em>pessoi</em> and expect to be understood. No mechanics;
-existence only.</p>
-<p><strong>Plato, <em>Republic</em> 487b–c</strong> — immobilisation as
-the image of defeat. <em>(Greek verified against the Loeb, Shorey,
-vol. II.)</em> &gt; …καὶ ὥσπερ ὑπὸ τῶν πεττεύειν δεινῶν οἱ μὴ δεινοὶ
-τελευτῶντες ἀποκλείονται καὶ οὐκ ἔχουσιν ὅ τι φέρωσιν, οὕτω καὶ σφεῖς
-τελευτῶντες ἀποκλείεσθαι καὶ οὐκ ἔχειν ὅ τι λέγωσιν ὑπὸ πεττείας αὖ
-ταύτης τινὸς ἑτέρας, οὐκ ἐν ψήφοις ἀλλ’ ἐν λόγοις. &gt; &gt; <em>…and
-just as the unskilled, at the hands of those clever at</em> petteia<em>,
-are in the end shut in and have no move left to play, so these too are
-at last blocked and left with nothing to say — by this other</em>
-petteia<em>, played not with counters (</em>psēphoi<em>) but with
-words.</em></p>
-<p>Socrates’ simile for an interlocutor argued into silence. What it
-fixes for us is the <em>shape of losing</em>: not the loss of material
-but being <strong>hemmed in until no legal move remains</strong> — the
-blockade win of §3, attested at the root. (Note the cross-link to
-Pollux: the pieces are <em>psēphoi</em> here too.) Together with
-Polybius’ Hamilcar simile (below, now verified and re-attributed), this
-is the <strong>load-bearing</strong> attestation that immobilisation
-<em>is</em> the image of defeat.</p>
-<p><strong>Plato, <em>Phaedrus</em> 274c–d</strong> — petteia among the
-arts, and distinct from dice. &gt; …εὑρεῖν δὲ ἀριθμόν τε καὶ λογισμὸν
-καὶ γεωμετρίαν καὶ ἀστρονομίαν, ἔτι δὲ πεττείας τε καὶ κυβείας, καὶ δὴ
-καὶ γράμματα. &gt; &gt; <em>…and [the god Theuth] invented number and
-calculation and geometry and astronomy, and further</em> petteia <em>and
-dice (</em>kybeia<em>), and, above all, letters.</em></p>
-<p>Two things: petteia is filed with the reckoning-arts (a game of
-calculation, not chance), and it is named <strong>separately from
-dice</strong> — warrant for keeping our game clear of the race-and-dice
-“five-lines” with which popular accounts conflate it (§1A caution).</p>
-<p><strong>Aristotle, <em>Politics</em> 1253a</strong> — isolation is
-vulnerability. &gt; …ἅμα γὰρ φύσει τοιοῦτος καὶ πολέμου ἐπιθυμητής, ἅτε
-περ ἄζυξ ὢν ὥσπερ ἐν πεττοῖς. &gt; &gt; <em>…for such a man [the
-cityless one] is by nature also a lover of war, inasmuch as he is
-unpaired, like an isolated piece in</em> petteia.</p>
-<p>The decisive word is <strong>ἄζυξ</strong> — “unyoked, unpaired.” A
-piece without a partner is exposed; mutual support is strength. This is
-the custodial logic stated as political metaphor: a lone stone is a
-captured stone waiting to happen.</p>
-<p><strong>Polybius, <em>Histories</em> 1.84.7–8 (on Hamilcar
-Barca)</strong> — victory modelled on the game. <em>(Citation corrected
-— see note.)</em> &gt; [Greek and Paton’s English to set from the Loeb,
-vol. I, or Perseus 1.84.7–8] &gt; &gt; <em>…like a good</em>
-petteia<em>-player, hemming them in and cutting them off, he destroyed
-great numbers of the enemy without a battle.</em></p>
-<p>In the Mercenary (Truceless) War, Hamilcar traps the Libyan and
-mercenary force in waterless country and reduces it by manoeuvre. The
-simile runs the other way from Plato’s: not the game illustrating life
-but a general’s <strong>blockade strategy</strong> illustrated by expert
-<em>petteia</em> — encirclement and containment, <em>ἀμαχεί</em>
-(“without a battle”), not annihilation, as what a strong player does. It
-is the cleanest ancient statement that the game is <em>won by hemming
-in</em>.</p>
-<blockquote>
-<p><strong>Attribution note — a correction worth flagging.</strong> This
-simile is very widely quoted online (and stood in an earlier draft of
-this document) as <strong>Polybius on <em>Scipio
-Aemilianus</em></strong>. That is wrong: the passage is <strong>Polybius
-1.84</strong>, and its subject is <strong>Hamilcar Barca</strong> in the
-Mercenary War of 241–238 BCE. The error is easy to see how it spread —
-Scipio’s later blockade of Numantia is the more famous “win-by-siege,”
-so the simile drifted onto him — but Polybius applies it to Hamilcar. We
-had nearly struck the citation as apocryphal after failing to find it in
-Loeb vols IV–VI (Books 9–39); it was simply in <strong>Book 1</strong>,
-a volume we had not checked. A small case study in the project’s own
-rule: verify the locus, don’t trust the repetition.</p>
-</blockquote>
-<p><strong>Pollux, <em>Onomasticon</em> IX.98</strong> — the keystone.
-<em>(Greek set from Dindorf’s edition, Leipzig 1824.)</em> &gt; Ἡ δὲ διὰ
-πολλῶν ψήφων παιδιὰ πλινθίον ἐστὶ, χώρας ἐν γραμμαῖς ἔχον διακειμένας·
-καὶ τὸ μὲν πλινθίον καλεῖται πόλις· τῶν δὲ ψήφων ἑκάστη, κύων·
-διῃρημένων δὲ εἰς δύο τῶν ψήφων κατὰ τὰς χρόας, ἡ τέχνη τῆς παιδιᾶς ἔστι
-περιλήψει τῶν δύο ψήφων ὁμοχρόων τὴν ἑτερόχρουν ἀναιρεῖν. &gt; &gt;
-<em>The game played with many counters (</em>psēphoi<em>) is a</em>
-plinthion <em>— a tiled block having its spaces set out among lines. The
-block is called the</em> polis <em>(city), and each of the counters a
-“dog” (</em>kyon<em>). The counters being divided into two by colour,
-the art of the game is, by the <strong>encirclement</strong> of two
-same-coloured counters, to remove the one of the other colour.</em></p>
-<p>Four rules in one sentence: a <strong>lined grid</strong> called the
-<em>polis</em>; pieces called <strong>dogs</strong>; <strong>two
-colours</strong>; and <strong>capture by encircling a piece between two
-of one’s own</strong>. Everything structural in §3 that is graded
-<strong>[A]</strong> rests here — and the verb is exact: <em>perilēpsei…
-anairein</em>, “to remove by encirclement,” the custodial rule named
-outright. The same passage twice supports our cautions. It calls the
-<em>pessoi</em> plain <em>psēphoi</em> (counters, no hierarchy — §2.3);
-and immediately <em>before</em> it Pollux sets out a
-<strong>different</strong> game, “five-lines” (<em>pente grammai</em>),
-with its “sacred line” and the proverb <em>κίνει τὸν ἀφ’ ἱερᾶς</em>
-(“move the piece from the sacred line”) — the textual basis for refusing
-to conflate the two (§1A caution). Pollux then quotes Cratinus punning
-on <em>kyna kai polin</em> (“dog and city”), proof the terminology was
-proverbial.</p>
-<h4 id="the-roman-reception">The Roman reception</h4>
-<p><strong>Ovid, <em>Ars Amatoria</em> III.357–358</strong> — custodial
-capture, Latin side. &gt; Cautaque non stulte latronum proelia ludat, /
-unus cum gemino calculus hoste perit. &gt; &gt; <em>And let her play,
-shrewdly and not foolishly, the battles of the brigand-pieces
-(</em>latrones<em>) — where a single piece (</em>calculus<em>) is lost
-when caught between a pair of foes.</em></p>
-<p>Independent Latin confirmation of Pollux’s enclosure rule:
-<strong>one piece dies between two enemies</strong> (<em>gemino…
-hoste</em>). The pieces are <em>latrones</em>, the soldier-name that
-gives <em>latrunculi</em>.</p>
-<p><strong>Ovid, <em>Tristia</em> II.477–478</strong> — capture
-<em>and</em> a moving line. &gt; Discolor ut recto grassetur limite
-miles, / cum medius gemino calculus hoste perit. &gt; &gt; <em>…how the
-piece of opposing colour advances along a straight line, when the piece
-caught in the middle perishes between two foes.</em></p>
-<p>The same capture couplet Ovid liked enough to reuse — but here
-prefaced by <strong>recto… limite</strong>, movement “along a straight
-line.” A modest Latin foothold for ranged, orthogonal motion (the slide
-of §3) alongside the enclosure rule.</p>
-<p><strong>Martial, <em>Epigrams</em> XIV.17 (<em>Calculi</em>)</strong>
-— two colours in opposition. &gt; Insidiosorum si ludis bella latronum,
-/ gemmeus iste tibi miles et hostis erit. &gt; &gt; <em>If you play the
-treacherous wars of the brigand-pieces, this glass man will be for you
-both soldier and foe.</em></p>
-<p>A gift-tag couplet for a set of gaming-stones: <strong>two-coloured
-pieces</strong> (<em>miles et hostis</em>, your man and your enemy, told
-apart only by colour), made of glass — corroborating the uniform
-two-colour counters of the archaeology.</p>
-<p><strong>Laus Pisonis 184–202</strong> — the richest gameplay source
-either tradition has. <em>(Latin set from Duff &amp; Duff, </em>Minor
-Latin Poets<em>, Loeb; conventionally cited 190–208.)</em> &gt; te si
-forte iuvat studiorum pondere fessum / non languere tamen lususque
-movere per artem, / callidiore modo tabula variatur aperta / calculus et
-vitreo peraguntur milite bella, / ut niveus nigros, nunc et niger
-alliget albos. / sed tibi quis non terga dedit? quis te duce cessit /
-calculus? aut quis non periturus perdidit hostem? / mille modis acies
-tua dimicat: ille petentem, / dum fugit, ipse rapit; longo venit ille
-recessu, / qui stetit in speculis; hic se committere rixae / audet et in
-praedam venientem decipit hostem; / ancipites subit ille moras
-similisque ligato / obligat ipse duos; hic ad maiora movetur, / ut citus
-ecfracta prorumpat in agmina mandra / clausaque deiecto populetur moenia
-vallo. / interea sectis quamvis acerrima surgant / proelia militibus,
-plena tamen ipse phalange / aut etiam pauco spoliata milite vincis, / et
-tibi captiva resonat manus utraque turba. &gt; &gt; <em>If perhaps,
-wearied by the weight of your studies, it pleases you all the same not
-to slacken but to set a game going by skill — in the more cunning way
-the open board is laid out with the piece (</em>calculus<em>), and the
-war is fought through with a soldiery of glass, so that now the white
-binds in (</em>alliget<em>) the black, now the black the white. Yet who
-has not turned his back to you? what piece, with you as commander, has
-given way? who, doomed himself, has not [first] destroyed his enemy?
-Your line fights in a thousand ways: one, while it flees the attacker,
-itself seizes him; another comes from a long retreat, having stood watch
-on the heights; this one dares to throw himself into the brawl and
-cheats the enemy as he advances onto the prey; that one undergoes
-wavering delays and, like a piece blockaded (</em>ligato<em>), himself
-blockades (</em>obligat<em>) two; another moves to greater things, so
-that, the barrier (</em>mandra<em>) broken open, he may burst swiftly
-into the ranks and, the rampart cast down, lay waste the enclosed walls.
-Meanwhile, however fierce the battles that rise as the ranks are cut to
-pieces, you win still with your phalanx full — or stripped of only a few
-soldiers — and in both your hands the throng of captives
-rattles.</em></p>
-<p>This single passage <em>fills the two Greek gaps</em> (§4) and
-corroborates a third theme: - <strong>Open-board placement.</strong>
-<em>tabula… aperta</em>, the board “laid out open,” with pieces “varied”
-cleverly across it — the warrant for our <strong>placement</strong>
-opening (§3) over a fixed opposed-rows array. - <strong>Line-breaking
-slide.</strong> <em>ut citus ecfracta… prorumpat in agmina mandra</em> —
-“the barrier broken, he bursts swiftly into the ranks.” The clearest
-ancient image of <strong>ranged, breakthrough movement</strong> (§3) —
-our basis, with Ovid’s <em>recto limite</em>, for slide over
-single-step. - <strong>The blockade theme, in Latin and
-explicit.</strong> The verbs are <em>alliget</em>, <em>ligato</em>,
-<em>obligat</em> — “binds in,” “blockaded,” “blockades.” The whole
-register is immobilisation: pieces <em>tying down</em> other pieces
-(<em>obligat ipse duos</em>, “himself blockades two”). This is the Roman
-side of Plato’s “shut in” — and notably it sits beside <em>plena
-phalange… vincis</em>, winning with one’s force <strong>intact</strong>
-(blockade, not annihilation). It is also the textual root of the
-contested <em>alligatus</em>/“freeing” reading (§4): the binding
-vocabulary is real; what Seneca’s metaphor adds to it is the
-interpretive step we decline to canonise.</p>
-<p><strong>Isidore, <em>Etymologiae</em> XVIII.67 (<em>De calculorum
-motu</em>, “On the movement of the counters”)</strong> — the
-immobilisation idiom, lexicalised. <em>(Latin set from Lindsay’s
-</em>OCT<em>, tomus II, 1911.)</em> &gt; Calculi partim ordine moventur,
-partim vage: ideo alios ordinarios, alios vagos appellant; at vero qui
-moveri omnino non possunt, incitos dicunt. Vnde et egentes homines
-inciti vocantur, quibus spes ultra procedendi nulla restat. &gt; &gt;
-<em>The counters (</em>calculi<em>) move partly in order, partly at
-random; so they call some “regular” (</em>ordinarii<em>), others
-“wandering” (</em>vagi<em>); but those that cannot be moved at all they
-call “stuck” (</em>inciti<em>). Whence even destitute men are
-called</em> inciti <em>— men for whom no hope of advancing further
-remains.</em></p>
-<p>Late lexicography, but it pins three things the reconstruction uses.
-It records the Roman piece-vocabulary (<em>ordinarius</em>,
-<em>vagus</em>) the §4 variants draw on; and — the load-bearing point —
-it defines <strong><em>incitus</em></strong> as a piece that <em>cannot
-move at all</em> (<em>qui moveri omnino non possunt</em>), then carries
-the word straight into the metaphor of a person with <strong>no move and
-no hope left</strong>. That is <em>immobilisation = defeat</em> stated
-as plain idiom, and the root of the proverb <em>ad incitas redigere</em>
-(“to reduce to a standstill” = to beat utterly; the idiom itself is
-Plautine — <em>Poenulus</em> — and in Lucilius). This is the Latin
-tradition independently naming as its image-of-losing exactly what
-Plato’s <em>ἀποκλείονται</em> names in Greek. <strong>[Still to set in
-situ: Varro, <em>DLL</em> X.22 (the grid/declension analogy); Plautus,
-<em>Poenulus</em>, and Lucilius for the idiom itself; Seneca’s
-<em>alligatus</em> (the contested “freeing” metaphor, §4).]</strong></p>
-<h4 id="further-witnesses-corroborating-the-keystone">Further witnesses
-— corroborating the keystone</h4>
-<p><em>Pollux IX.98 is the keystone, but it is not alone. Three later or
-lexicographic witnesses independently confirm the two things most of the
-reconstruction hangs on — that the board is a</em> polis <em>and the
-pieces are “dogs,” and that our game is a game of
-placement-and-position, not of dice. They are set down here with their
-references; the verbatim Greek is still to be set from the
-editions.</em></p>
-<p><strong>Eustathius of Thessalonica, <em>Commentary on the Iliad</em>
-(on Il. Ψ.88)</strong> — <em>polis</em> and “dogs,” from a second hand.
-&gt; [Greek to set from Eustathius, ed. — <em>Comm. ad Hom.
-Iliadem</em>, on Ψ.88] &gt; &gt; <em>…the spaces (of the board) are
-called</em> poleis <em>(cities) by the rule of the game, and the pieces
-that scheme against one another are called “dogs”
-(</em>kynes<em>).</em></p>
-<p>A twelfth-century scholar, reading Homer, reaches independently for
-the same two technical terms Pollux gives — <em>polis</em> for the
-board, <em>kynes</em> for the pieces. Late, but it shows the vocabulary
-was not a one-off in Pollux: it was the standard way of naming this
-game. Direct corroboration of the keystone’s D1/D2.</p>
-<p><strong>Zenobius, <em>Epitome of Proverbs</em> 5.67 (<em>πόλεις
-παίζειν</em>, “to play cities”)</strong> — the game-name, with a comic
-source. &gt; [Greek to set from <em>Corpus Paroemiographorum
-Graecorum</em>, ed. Leutsch–Schneidewin, I.149] &gt; &gt; <em>“To play
-cities” (</em>poleis paizein<em>): Cratinus recalls it in the</em>
-Drapetides<em>. The</em> polis <em>is a kind of pessoi-game…</em></p>
-<p>A proverb-collection independently records both the <strong>name of
-the game</strong> (playing <em>poleis</em>) and a fifth-century comic
-attestation (Cratinus). We already meet that Cratinus pun
-<em>inside</em> Pollux (“dog and city”); Zenobius confirms it from
-outside, and confirms that “playing cities” was a known idiom.</p>
-<p><strong>Hesychius of Alexandria, <em>Lexicon</em></strong>
-(s.v. <em>πεσσὰ πεντέγραμμα</em>) — petteia is not dice. &gt; [Greek to
-set from Hesychius, ed. Latte / Hansen] &gt; &gt; <em>…petteia differs
-from</em> kybeia <em>(dice-play)…</em></p>
-<p>The lexicographer draws the line our §1A caution depends on:
-<em>petteia</em> (the position-game) is a different thing from
-<em>kybeia</em> (dice). Backing, from a fourth witness, for not folding
-our game into the dice-and-race material — the same separation Pollux
-himself makes by treating “five-lines” apart (IX.97).</p>
-<p><em>(The article that surfaced these — a board-game history compiling
-the petteia sources — also lists “Pollux VII.206” for the five-lines
-among dice games; in the Dindorf text that material sits at</em>
-IX.97<em>, already noted above, so we do not cite it
-separately.)</em></p>
-<hr />
-<h2 id="what-the-sources-fix-vs.-leave-open">2. What the sources fix
-vs. leave open</h2>
-<ol type="1">
-<li><strong>Board is a grid.</strong> [A] Pollux; Varro. Not in
-dispute.</li>
-<li><strong>Capture = custodial enclosure.</strong> [A] The
-best-attested rule of all — Pollux, confirmed by Ovid and Martial.
-Bedrock.</li>
-<li><strong>Two players, two colours, otherwise-identical
-pieces.</strong> [A] Pollux (“dogs… two colours”). A single named
-piece-type, <strong>no hierarchy</strong>.</li>
-<li><strong>No special/leader piece.</strong> [I, strong] <em>No Greek
-or Roman text mentions a second piece type.</em> The Dux rests entirely
-on the Stanway arrangement; we treat <strong>all pieces as
-equal</strong> (§5).</li>
-<li><strong>Victory by immobilisation / blockade.</strong> [A] Plato,
-Aristotle, Polybius make <em>cornering and being unable to move</em> the
-defining image. <strong>Foregrounded as the primary win.</strong>
-Material reduction is a <strong>secondary</strong> path [I], and a
-<strong>material tie-break</strong> decides a stalled game [I/D] — the
-plain sense of <em>ad incitas redigere</em>.</li>
-<li><strong>Board size.</strong> [D] Open — no Greek dimension survives,
-and the Roman archaeology spreads across 7×7, 7×8, 8×8, 9×9, 9×10 with
-none privileged. <strong>7×7 default</strong> — equally attested, the
-squarest of the small boards (inside the computationally-supported
-7×8–9×9 range, §1B), and deliberately neither the 8×8 chessboard nor a
-Go-sized grid, so the game reads as a thing of its own. Size remains
-tunable; a 9×9 <em>array</em> is first-player-skewed (§6B), and board
-size does not change the blockade outcome (§6C).</li>
-<li><strong>Opening — placement.</strong> [I] Nowhere stated in Greek.
-But the receiving tradition’s richest source puts play on the
-<strong>open board</strong> (<em>Laus Pisonis</em>), the opposed-rows
-array is “a chess analogy for which there is no authority” (Wayte,
-<em>CR</em> 1892), and self-play makes placement the fairest, most
-varied opening. The Roman reception thus <em>fills a Greek gap</em>:
-<strong>open-board placement</strong>, captures suspended during
-it.</li>
-<li><strong>Movement — slide.</strong> [I] Nowhere stated. The reception
-again supplies it: the <em>Laus Pisonis</em>’ “breaking the line” reads
-as ranged movement, and <strong>single-step movement is computationally
-degenerate</strong> (games never resolve; §6B) while slide gives a
-living game. <strong>Slide (rook-like).</strong></li>
-<li><strong>No suicide.</strong> [I] Capture is mover-initiated; moving
-<em>into</em> a pre-existing bracket is safe. Universal in the family
-and required to function.</li>
-<li><strong>Multiple simultaneous capture.</strong> [I] One move closing
-two brackets takes both. (Echoed by “itself checks two.”)</li>
-<li><strong>Corner capture.</strong> [D] A corner piece taken by
-bracketing its two approaches. Near-inert in play (§6B); on by default,
-toggleable.</li>
-<li><strong>No freeing in the canonical game.</strong> [I] No Greek
-source supports a rescue mechanic. Freeing belongs, if anywhere, to the
-Roman reception (§4) — and even there is weakly attested and
-demonstrably pacifying (§6B).</li>
-</ol>
-<hr />
-<h2 id="the-reconstruction-petteia-polis">3. The reconstruction —
-<em>PETTEIA / POLIS</em></h2>
-<p><strong>Players</strong> 2. <strong>Board</strong> open square grid,
-<strong>7×7 default</strong>, size tunable [D] (§2.6).
-<strong>Pieces</strong> the “dogs” (<em>kynes</em>) — identical, two
-colours; player-agreed count, <strong>12 per side</strong> a clean
-default on 7×7 — roughly half the city occupied [D].</p>
-<p><strong>Opening — placement.</strong> [I] Starting from an empty
-board, players alternate placing one dog on any vacant cell until all
-are down. No captures during placement.</p>
-<p><strong>Movement — slide.</strong> [I] A dog slides orthogonally any
-number of unobstructed cells (rook-like); it may not pass through or
-land on an occupied cell. Mobility is generous on purpose:
-<strong>blockade is the soul of the game</strong> and needs room to
-manoeuvre. <em>(Variant: single-step — but see §6B, where it is
-degenerate.)</em></p>
-<p><strong>Capture — enclosure.</strong> [A] After your move, an enemy
-dog flanked on two opposite orthogonal sides by your dogs is
-<strong>taken and removed immediately</strong>. The bracket must be
-<strong>closed by the move just made</strong>; a dog that moves
-<em>into</em> a pre-existing gap is <strong>safe</strong> (no suicide).
-One move may close several brackets; all such dogs fall. <em>(Corner
-capture on by default; toggleable. [D])</em></p>
-<p><strong>No immediate move-undo.</strong> [D] A dog may not return on
-the very next turn to the cell it just left (anti-shuffle).</p>
-<p><strong>Victory.</strong> [A primary; I/D secondary] 1.
-<strong>Blockade (primary).</strong> You win by leaving your opponent
-<strong>unable to make any legal move</strong> — the <em>cornering</em>
-of Plato, the <em>azux</em> of Aristotle, the blockade of Polybius. 2.
-<strong>Annihilation (secondary).</strong> Reducing the opponent below
-the two dogs needed ever to capture is also a win. 3. <strong>Material
-tie-break.</strong> If a turn cap is reached, the player with
-<strong>more dogs standing</strong> wins; equality alone is a draw — the
-plain reading of <em>ad incitas redigere</em>, and the rule that (in
-self-play) turns the austere game from two-thirds drawn to fully
-decisive without distorting fairness (§6B).</p>
-<p><em>A note on “primary,” per §6C.</em> Blockade is the
-<strong>attested</strong> victory and the thematic meaning of defeat —
-but the engine finds it almost never the way strong play actually
-<em>ends</em> (capture decides). “Primary” here marks what the sources
-foreground and what losing <em>means</em>, not the statistically
-dominant outcome; under competent play the <strong>material
-tie-break</strong> is the de-facto decider. This is editorial precision,
-not a retreat: the texts make immobilisation the image of defeat, never
-the common result.</p>
-<hr />
-<h2 id="ludus-latrunculorum-as-roman-reception">4. <em>Ludus
-Latrunculorum</em> as Roman reception</h2>
-<p>We read the Roman game as the same game in Latin dress. The
-hypothesis is economical rather than documented (§0), but it earns its
-keep three ways.</p>
-<p><strong>It shares the entire canonical skeleton.</strong> Grid
-(Varro), equal two-colour pieces (Martial), custodial capture (Ovid) —
-point for point Pollux’s game.</p>
-<p><strong>It supplies the two rules the Greek record leaves
-open.</strong> This is the strongest reason to keep the Roman material
-close rather than discard it. The Greek sources fix the <em>concept</em>
-(board, pieces, capture, victory) but are silent on
-<strong>opening</strong> and <strong>movement</strong> — exactly the two
-[D] gaps. The receiving tradition’s richest source, the <em>Laus
-Pisonis</em>, answers both: play on the <strong>open board</strong> →
-placement; “breaking the line” → slide. The reception is not decoration;
-it is evidence for the canonical game’s two underdetermined rules.</p>
-<p><strong>It corroborates the victory condition.</strong> The Latin
-idiom <em>ad incitas redigere</em> — “reduced to immobility,”
-i.e. beaten (Plautus, Lucilius; the terminology via Isidore) —
-independently confirms, from the Roman side, that <strong>immobilisation
-is defeat</strong>, the very thing Plato and Polybius make central.</p>
-<p><strong>Roman-flavour variants</strong> (offered, not canonical): the
-military vocabulary (<em>latrones</em>, <em>ordinarii</em>, the
-<em>vagus</em>→<em>ordinarius</em> progression); and the <strong>freeing
-/ <em>incitus</em></strong> mechanic — a bracketed piece frozen for a
-turn and removed next turn unless a flanker is itself trapped. We treat
-freeing as a <strong>possible Roman accretion only</strong>: it rests on
-Schädler’s reading of a <em>Senecan metaphor</em> (not an explicit
-rule), it has no Greek warrant, and under skilled play it nearly
-abolishes combat (§6B). It is the most likely single point of genuine
-Roman <em>divergence</em> — and precisely the kind of differentiating
-accretion that, pushed further, becomes chess. We log it and leave it
-off by default.</p>
-<p><strong>Honest caveat.</strong> Direct transmission is sparsely
-attested. A reader who weights embodied texture over parsimony could
-instead anchor in <em>Ludus</em> (for the <em>Laus Pisonis</em> and the
-archaeology) and treat petteia as ancestral background — equally
-coherent, but it trades drift-resistance for richness and demands
-permanent vigilance against the chess-pull. We have chosen parsimony and
-the drift-resistant core.</p>
-<hr />
-<h2 id="where-we-break-from-the-standard-reconstructions">5. Where we
-break from the standard reconstructions</h2>
-<ol type="1">
-<li><strong>No Dux / no leader piece</strong>
-(vs. <strong>Bell</strong>). The leader-piece has no text behind it; it
-enters through readings of the Stanway arrangement (Parlett floated it,
-Bell built it). Pollux’s undifferentiated “dogs,” the silence of every
-text, and the uniform physical pieces weigh against it; Schädler reads
-Stanway as plausibly a native British game. <strong>All pieces
-equal.</strong></li>
-<li><strong>Blockade restored as the primary victory</strong>
-(vs. <strong>Schädler/Murray</strong>, who centre reduction-to-one).
-Plato, Aristotle, and Polybius make immobilisation <em>the</em> image of
-defeat; we promote it, with material as secondary and a material
-tie-break. <em>(But “primary” is a claim about attestation and theme,
-not frequency: the engine shows blockade rarely decides a game even
-under strong play, and board geometry does not fix this — §6C. We
-foreground it as the source-attested victory and the meaning of defeat,
-while acknowledging the material tie-break does the practical
-work.)</em></li>
-<li><strong>One game, not two — Latrunculi as reception</strong>
-(vs. the whole tradition of parallel Greek/Roman reconstructions).
-Stripped of accretions the two cannot be told apart; we name the Greek
-game canonical and the Roman game its reception (§4).</li>
-<li><strong>Slide movement</strong> (vs. Schädler’s single-step), on the
-<em>Laus Pisonis</em>’ “breaking the line,” the 2024 computational
-results, and our own finding that single-step is degenerate.</li>
-<li><strong>Placement, not opposed rows</strong> (vs. Murray’s
-chess-style array), which has “no authority” (Wayte 1892) and plays
-worse than placement (§6B).</li>
-<li><strong>Board honesty.</strong> The big rectangular boards
-(Colchester 8×12) are treated as <strong>probably a different
-game</strong>, following the computational stall-out, rather than
-stretched to fit.</li>
-</ol>
-<hr />
-<h2 id="the-tested-program">6. The tested program</h2>
-<p>The [D] rules were not argued to a conclusion in prose but
-<strong>played to one</strong>: a custodial-capture engine with every
-rule as a flag, a unit-tested capture core (14 tests), an alpha-beta
-agent that defends and angles for blockade, confidence intervals over
-self-play, and a playable client. The canonical preset is the §3
-game.</p>
-<h3 id="b.-what-the-engine-found">6B. What the engine found</h3>
-<ul>
-<li><strong>Single-step movement is degenerate</strong> — step games
-never resolve through play (they run to the cap, at every search depth
-and however the cap is scored), while slide resolves cleanly. Firmest
-result; settles movement in favour of <strong>slide</strong>. [→ §3
-movement]</li>
-<li><strong>Placement is fairest; the array is worst.</strong> A 9×9
-<em>array</em> hands the first player ~80% of decided games and
-collapses opening variety; <strong>placement</strong> is the fairest and
-most varied opening. [→ §3 opening]</li>
-<li><strong>A material tie-break rescues the austere game</strong> —
-deciding a capped game by dogs-standing takes the blockade game from ~⅔
-drawn to <strong>fully decisive while staying fair</strong>. Adopted. [→
-§3 victory]</li>
-<li><strong>Freeing suppresses combat</strong> — under skilled play the
-<em>incitus</em> rule drops captures from ~18/game to ~0.7/game; a
-careful player won’t risk a capture a counter-capture can undo. Why
-freeing is a <em>Roman-reception variant only</em>, off by default. [→
-§4]</li>
-<li><strong>Corner-capture is near-inert</strong> — rarely binds;
-settled on coherence, not consequence. [→ §3]</li>
-</ul>
-<p>Outstanding when v0.3 was written: a depth-3 run over ~100 games per
-configuration to tighten the mid-range intervals. That run — and a good
-deal more — has since been carried out; see <strong>§6C</strong>, which
-also reports a result that bears directly on §3 and §5.2.</p>
-<p>The structured-decision rationale and per-rule confidence grades are
-kept in the companion document, <em>Design Decisions &amp; Evidential
-Standing</em>.</p>
-<h3 id="c.-the-blockade-verdict-an-open-editorial-fork">6C. The blockade
-verdict — an open editorial fork</h3>
-<p><em>Added after v0.3. The §6 program was rebuilt for speed (a
-bitboard engine, parity-verified against the reference on 2,304 games
-and exact on the evaluation) and extended to three independent agent
-architectures — a static heuristic, alpha-beta search at depths 2–3
-under three evaluations (one written specifically to seek blockade), and
-an evaluation-free MCTS. This let us put the one question §6B left
-implicit: does <strong>blockade</strong>, which §3 and D10 foreground as
-the</em> primary <em>victory, actually decide games under competent
-play?</em></p>
-<p><strong>The result is stark, and it is robust.</strong> Across all
-three architectures — and again once the placement opening is played
-competently rather than blindly — <strong>blockade decides essentially
-no games: zero, over several hundred decided games, with upper 95%
-confidence bounds of only a few percent.</strong> What decides them is
-capture — annihilation under sharp play, the material tie-break
-otherwise. The finding meets the agent-invariance bar this project set
-for itself (trust a result only when ≥2 architectures agree); here three
-do, including the eval-free architecture best suited to a siege.</p>
-<p><strong>Why — and it is structural, not a weakness of the
-players.</strong> Blockade and capture pull against each other. To
-immobilise an enemy stone you must crowd its neighbours, but crowding it
-custodially tends to <em>capture</em> it (or spring a bracket) first; a
-true blockade requires keeping enemy stones alive <em>and</em> trapped,
-a delicate global plan no shallow search assembles and no rollout
-stumbles into. And the movement rule compounds it:
-<strong>slide</strong> movement gives a hemmed-in stone a long-range
-escape down any open file, so total immobilisation on an open 8×8 is
-extraordinarily hard. The irony is exact — slide was adopted
-<em>because</em> single-step is degenerate (§6B), yet slide is also what
-puts the canonical victory out of reach.</p>
-<p><strong>This forces a choice the engine cannot make.</strong> It is
-set down here as an open editorial fork, not a settled revision:</p>
-<ul>
-<li><p><strong>Response A — editorial precision.</strong> Keep blockade
-as the victory the sources unambiguously attest — Plato’s cornering,
-Polybius’ Hamilcar, Aristotle’s <em>azux</em> are not in doubt — but
-stop letting “primary” imply it is <em>how strong play wins</em>. State
-plainly that under competent play the <strong>material
-tie-break</strong> (already adopted in §3 for decisiveness) is the
-de-facto decider, with blockade the rarer, more elegant finish and the
-thematic image of defeat. This costs the headline that most sharply
-distinguished this reconstruction from Schädler/Murray (§5.2) — but it
-is the more defensible reading, because what is graded
-<strong>[A]</strong> is that blockade is <em>a</em> decisive condition
-and <em>the</em> image of defeat, never that it is the statistically
-dominant outcome.</p></li>
-<li><p><strong>Response B — revisit a [D] rule.</strong> Treat the 0% as
-evidence a design choice mis-serves the attested goal, and change it.
-The prime suspect is <strong>slide movement (D6)</strong> — but
-reverting to step reintroduces the degeneracy §6B rejected, trading one
-pathology for another. The gentler lever is <strong>board size
-(D4)</strong>: blockade is markedly easier on smaller or edge-dense
-boards, several of which are archaeologically attested. The cost is
-honesty about motive — this would tune a [D] rule not toward the
-better-<em>playing</em> game but toward making an [A] <em>ideal</em>
-also the common outcome, inverting the governing rule that playability
-chooses only <em>among</em> what the sources leave open (§0; Design
-Decisions §0).</p></li>
-</ul>
-<p>The responses are not exclusive — one could adopt A in the prose now
-and flag D4 as a live experiment. What the engine establishes is only
-the fact that forces the choice: <strong>as the canonical rules stand,
-the soul of the game and the way the game is won are not the same
-thing.</strong></p>
-<p><em>Postscript — the D4 lever, tested.</em> Response B’s gentler
-option (board size) was then put to the engine: a blockade-seeking agent
-over boards from 5×5 to 9×9 at two densities. The result discourages it.
-No board at natural (~half-full) density produced <em>any</em> blockade;
-only small, <strong>unattested</strong> boards (5×5, 6×6) crowded to
-~70% fill yielded a 3–7% rate, and the smallest <em>attested</em> board,
-7×7, gave none even when crowded. Board geometry does not buy back
-blockade within the evidence — which leaves <strong>Response A</strong>
-as the resolution, and it is adopted in §3 and §5.2 above. (The same
-experiment did, separately, motivate moving the default board off the
-8×8 chessboard to <strong>7×7</strong> — §2.6 — a distinctiveness gain,
-not a blockade fix. The run also confirmed the instrument is sound: the
-engine <em>does</em> register blockades where the geometry permits them,
-so the 0% on the canonical board is a real property, not a blind spot.)
-Detail in <em>FINDINGS-board-size.md</em>.</p>
-<hr />
-<h2 id="sources-primary-first">7. Sources (primary first)</h2>
-<p><em>The key passages are quoted in the original and in fresh
-translation in <strong>§1C, “The witnesses in their own
-words.”</strong></em></p>
-<p><strong>Greek (the canonical game).</strong> Homer, <em>Odyssey</em>
-1.107 · Plato, <em>Republic</em> 487b–c; <em>Phaedrus</em> 274c–d ·
-Aristotle, <em>Politics</em> 1253a · Polybius, <em>Histories</em>
-1.84.7–8 (on Hamilcar Barca) · Pollux, <em>Onomasticon</em> IX.97–98
-<em>(keystone)</em>.</p>
-<p><strong>Roman (the reception).</strong> Varro, <em>De Lingua
-Latina</em> X.22 · Ovid, <em>Ars Amatoria</em> III.357–360;
-<em>Tristia</em> II.477 · Martial, <em>Epigrams</em> XIV.17 · <em>Laus
-Pisonis</em> 190–208 · Seneca (the <em>alligatus</em> metaphor) ·
-Isidore, <em>Etymologiae</em> XVIII · Plautus, <em>Poenulus</em> 905
-&amp; Lucilius (<em>ad incitas redigere</em>).</p>
-<p><strong>Secondary (interpreters).</strong> Wayte, <em>Classical
-Review</em> VI (1892) · Austin, “Roman Board Games” (1934–35) · Murray,
-<em>A History of Board-Games Other Than Chess</em> (1952) · Bell,
-<em>Board and Table Games</em> · Schädler, <em>Latrunculi</em> (1994)
-&amp; “The Doctor’s Game” (2007) · Parlett, <em>Oxford History of Board
-Games</em> (1999) · Crist, Piette, Soemers, Stephenson &amp; Browne
-(2024).</p>
-<div class="recon-foot">
-  Pessoi — a <a href="https://games.wrootlabs.com">Wroot&nbsp;Labs</a> game ·
-  <a href="/">home</a> · <a href="/play">play</a> · working draft v0.3
-</div>
+<article class="doc">
+
+  <!-- METHOD LEGEND + TOC -->
+  <p>No complete rulebook survives. Every reconstruction is a chain of inferences, and the honest work is marking where each link is iron and where it is wire. So every rule below carries a tag for how the sources stand behind it:</p>
+
+  <div class="legend">
+    <div class="item"><b><span class="tag">A</span> &nbsp;Attested.</b> Stated or unambiguously implied by an ancient source. Not ours to overrule.</div>
+    <div class="item"><b><span class="tag i">I</span> &nbsp;Inferred.</b> Not stated, but strongly constrained by the sources and the wider custodial-capture family. A scholar may dissent, but bears the burden.</div>
+    <div class="item"><b><span class="tag d">D</span> &nbsp;Design choice.</b> Genuinely underdetermined. We pick to make a playable game, and say so — these are the rules the engine <i>tests</i> rather than asserts (<a href="#s6">§6</a>).</div>
+  </div>
+
+  <nav class="toc" aria-label="Contents">
+    <div class="h">Contents</div>
+    <ol>
+      <li><span class="n">0</span><a href="#s0">Method, and why one game</a></li>
+      <li><span class="n">1</span><a href="#s1">The evidence dossier</a></li>
+      <li><span class="n">2</span><a href="#s2">What the sources fix vs. leave open</a></li>
+      <li><span class="n">3</span><a href="#s3">The reconstruction — the rules</a></li>
+      <li><span class="n">4</span><a href="#s4"><i>Latrunculi</i> as Roman reception</a></li>
+      <li><span class="n">5</span><a href="#s5">Where we break from the standard reconstructions</a></li>
+      <li><span class="n">6</span><a href="#s6">The tested program</a></li>
+      <li><span class="n">7</span><a href="#s7">Sources</a></li>
+    </ol>
+  </nav>
+
+  <hr>
+
+  <!-- §0 -->
+  <h2 id="s0"><span class="num">§0</span>Method, and why one game</h2>
+
+  <p>Two standing commitments govern everything that follows. <strong>Primary sources outrank secondary reconstructions</strong>: where Bell or Schädler assert what the texts do not license, we drop it (<a href="#s5">§5</a>). And <strong>we import nothing from a cousin game</strong> — Seega, <i>tafl</i>, Kharebga — except as a tiebreaker where the sources are silent.</p>
+
+  <h3>Why we reconstruct one game, not two</h3>
+
+  <p>An earlier draft built <i>Latrunculi</i> and <i>Petteia</i> as parallel reconstructions. Carried out honestly, they converged: once the unwarranted accretions are stripped, two equal-army custodial-capture games on a grid have nothing left to keep them apart. The historical record cannot sustain a stable difference, and the reception history proves the danger — every attempt to <em>differentiate</em> the Roman game (Bell's "Dux," the leaping king of the popular rule-sheets, a checkmate-style win) pulls it toward chess, while every attempt to keep the two distinct without such accretions collapses them back together. Two failure modes, one cause: there is only one game here.</p>
+
+  <p>So we anchor in <strong>Petteia / Polis</strong> and treat <i>Latrunculi</i> as its <strong>Roman reception</strong> (<a href="#s4">§4</a>). The reasons are structural, not sentimental. The Greek game is the <strong>drift-resistant</strong> one: its conceptual core is more completely attested (board, pieces, capture, <em>and</em> victory are all Greek-fixed), and its defining feature — victory by <strong>immobilisation</strong> — is the one idea that <em>cannot</em> slide into chess, because blockade is the opposite of checkmate. The Roman game can be built clean, but only by continuously overriding its own reception; the Greek game is clean by nature.</p>
+
+  <p><strong>On "reception."</strong> We do not claim a documented line of transmission — the evidence for <em>direct</em> Greek-to-Roman descent is sparse. We claim only the parsimonious reading: once anachronisms are bracketed out, the Roman material is most economically understood as the same game received into Latin culture and re-dressed, rather than as an independent invention that happens to share every structural feature. <i>Latrunculi</i> is conventionally "believed to be a variant of the earlier Greek game"; Schädler grants that <i>polis</i> and <i>latrunculi</i> are "largely the same." Reception is held here as the <strong>most economical hypothesis</strong>, flagged as such, not as fact.</p>
+
+  <hr>
+
+  <!-- §1 -->
+  <h2 id="s1"><span class="num">§1</span>The evidence dossier</h2>
+
+  <h3 id="s1a">1A · The Greek game — the canonical witnesses</h3>
+  <div class="tablewrap">
+  <table class="dossier">
+    <thead><tr><th>Source</th><th>Date</th><th>What it actually fixes</th></tr></thead>
+    <tbody>
+      <tr><td>Homer, <i>Odyssey</i> 1.107</td><td class="date">8th c. BCE</td><td>The suitors play <i>pessoi</i>. Existence only — no mechanics.</td></tr>
+      <tr><td>Plato, <i>Republic</i> 487b–c</td><td class="date">4th c. BCE</td><td>The weak player is <strong>"shut in and unable to move"</strong> by the skilled. Fixes <strong>immobilisation / blockade as a decisive condition</strong>, not merely material capture.</td></tr>
+      <tr><td>Plato, <i>Phaedrus</i> 274c–d</td><td class="date">4th c. BCE</td><td><i>Petteia</i> among Theuth's Egyptian inventions → a claimed pedigree; groups <i>petteia</i> with dice-games as separate things.</td></tr>
+      <tr><td>Aristotle, <i>Politics</i> 1253a</td><td class="date">4th c. BCE</td><td>The stateless man is <i>azux</i> — an <strong>"unpaired piece"</strong> in <i>petteia</i>. Confirms <strong>isolation = vulnerability</strong>, support = strength.</td></tr>
+      <tr><td>Polybius, <i>Histories</i> 1.84.7–8 (on Hamilcar Barca)</td><td class="date">2nd c. BCE</td><td>Hamilcar destroyed the enemy <strong>"without a battle,"</strong> hemming them in and cutting them off, <strong>"like a good <i>petteia</i>-player."</strong> Blockade, not annihilation, as the model of victory. <i>(Widely misattributed to Scipio — see below.)</i></td></tr>
+      <tr><td>Pollux, <i>Onomasticon</i> IX.97–98</td><td class="date">2nd c. CE</td><td><strong>The keystone.</strong> The board "played with many pieces," set in lines/cells, is called <strong><i>polis</i></strong> (city); each <strong>piece is a <i>kyon</i></strong> (dog); pieces are <strong>two colours</strong>; the art is to take a piece "by <strong>enclosing it between two</strong>" of the other colour. (Also names "five-lines" as a <em>separate</em> game.)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note">
+    <span class="lab">Caution on conflation</span>
+    The "five lines" (<i>pente grammai</i>) game is a <strong>different</strong>, partly race-based game; popular accounts fold it into petteia. Our <i>petteia</i> is specifically <strong>Pollux's <i>polis</i></strong> — a distinction the sources themselves keep: Pollux describes five-lines apart from <i>polis</i> (IX.97), and Hesychius' <i>Lexicon</i> states outright that <i>petteia</i> differs from <i>kybeia</i> (dice-play). Two later witnesses, Eustathius and Zenobius, independently confirm the <i>polis</i> / "dogs" naming (<a href="#s1c">§1C</a>). <strong>Setup and piece-count are nowhere stated</strong>; the repeated "~30 pieces" is Murray's conjecture, not a source.
+  </div>
+
+  <h3 id="s1b">1B · The Roman reception — corroborating and illustrative witnesses</h3>
+  <p>The Latin sources are read here not as a <em>rival</em> game's evidence but as the receiving tradition's testimony to the same game — and, crucially, as the place where two questions the Greek record leaves open are answered in practice.</p>
+  <div class="tablewrap">
+  <table class="dossier">
+    <thead><tr><th>Source</th><th>Date</th><th>What it adds to the same game</th></tr></thead>
+    <tbody>
+      <tr><td>Varro, <i>De Lingua Latina</i> X.22</td><td class="date">1st c. BCE</td><td>The board is a <strong>grid of cells</strong> (compared to a declension table). Corroborates Pollux's board.</td></tr>
+      <tr><td>Ovid, <i>Ars Am.</i> III.357–360; <i>Tristia</i> II.477</td><td class="date">c. 1 BCE–8 CE</td><td><strong>Custodial capture</strong> — a piece caught "between twin foes" perishes. Independent Latin confirmation of Pollux's enclosure rule.</td></tr>
+      <tr><td>Martial, <i>Epigrams</i> XIV.17</td><td class="date">c. 85 CE</td><td>Pieces are <i>latrones</i> (soldier-pieces); two colours in opposition; capture by being caught.</td></tr>
+      <tr><td>Laus Pisonis 190–208</td><td class="date">1st c. CE</td><td>The richest gameplay source either tradition has. Glass soldiers; pieces <strong>distributed cleverly on the open board</strong> → the <strong>placement</strong> opening; pieces <strong>retreat yet capture the pursuer</strong>; a <strong>reserve</strong> re-enters; one "seemingly checked itself checks two"; play that <strong>breaks the line</strong> → the <strong>slide / burst-through</strong> movement.</td></tr>
+      <tr><td>Seneca (metaphor, <i>alligatus</i>)</td><td class="date">c. 65 CE</td><td>Read by Schädler as implying <strong>delayed removal / freeing</strong> of a trapped piece. Interpretive, not explicit — treated here as a <em>possible Roman accretion</em>, not canonical (<a href="#s4">§4</a>, <a href="#s5">§5</a>).</td></tr>
+      <tr><td>Isidore, <i>Etymologiae</i> XVIII</td><td class="date">7th c. CE</td><td>Late lexicography: the terms <i>vagus</i> (wanderer), <i>ordinarius</i> (regular), <i>incitus</i> (immobilised). The idiom <i>ad incitas redigere</i> ("reduced to immobility" = beaten) independently echoes the blockade victory from the Latin side.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p><strong>Archaeology.</strong> Boards survive at 7×7, 7×8, 8×8, 9×9, 9×10; bone / glass / pottery counters, uniform and distinguished only by colour (the Perugia hoard, the British Museum sets); the Vindolanda and Corbridge boards. The <strong>Stanway grave</strong> (Colchester, c. 50 CE) — rectangular (~2:3), possibly un-latticed — is the sole basis for the "Dux" theory and is plausibly a <em>different</em> (native British) game; we set it aside (<a href="#s5">§5</a>).</p>
+
+  <p><strong>Computational check</strong> (Crist, Piette, Soemers, Stephenson &amp; Browne, 2024, via Ludii). Independent support for two of our calls: <strong>slide movement</strong> is playable and source-consistent; the <strong>large rectangular boards</strong> (8×12 Colchester-type) <strong>stall out</strong> under every custodial ruleset — evidence they were a different game, and that the real game lived on the squarer 7×8–9×9 boards.</p>
+
+  <h3 id="s1c">1C · The witnesses in their own words</h3>
+  <p class="sectlede">The tables above say what each source <em>fixes</em>; here is the source itself. A reconstruction that grades its rules by attestation owes the reader the attested words, not just a citation to chase.</p>
+
+  <div class="note fact">
+    <span class="lab">A note on the texts</span>
+    The Greek and Latin below are public-domain; the English is fresh — translated for this reconstruction by Wroot Press — and deliberately <strong>literal rather than literary</strong>, so the technical vocabulary (<i>pessoi</i>, <i>kyon</i>, <i>calculus</i>, <i>latro</i>) shows through. Where a passage is set from a specific edition, the edition is named at its head.
+  </div>
+
+  <h4>The Greek game</h4>
+
+  <div class="witness">
+    <div class="head"><span class="src">Homer, <i>Odyssey</i> 1.106–107</span><span class="gloss-cite">the oldest witness</span></div>
+    <div class="body">
+      <p class="orig grc" lang="grc">πεσσοῖσι προπάροιθε θυράων θυμὸν ἔτερπον, / ἥμενοι ἐν ῥινοῖσι βοῶν, οὓς ἔκτανον αὐτοί.</p>
+      <p class="trans">…before the doors they [the suitors] were delighting their hearts with <span class="term">pessoi</span>, seated on the hides of oxen they had themselves slaughtered.</p>
+    </div>
+    <div class="commentary">The game exists by the eighth century and needs no gloss — Homer can name <i>pessoi</i> and expect to be understood. No mechanics; existence only.</div>
+  </div>
+
+  <div class="witness">
+    <div class="head"><span class="src">Plato, <i>Republic</i> 487b–c</span><span class="gloss-cite">immobilisation as the image of defeat · Greek verified against the Loeb (Shorey, vol. II)</span></div>
+    <div class="body">
+      <p class="orig grc" lang="grc">…καὶ ὥσπερ ὑπὸ τῶν πεττεύειν δεινῶν οἱ μὴ δεινοὶ τελευτῶντες ἀποκλείονται καὶ οὐκ ἔχουσιν ὅ τι φέρωσιν, οὕτω καὶ σφεῖς τελευτῶντες ἀποκλείεσθαι καὶ οὐκ ἔχειν ὅ τι λέγωσιν ὑπὸ πεττείας αὖ ταύτης τινὸς ἑτέρας, οὐκ ἐν ψήφοις ἀλλ' ἐν λόγοις.</p>
+      <p class="trans">…and just as the unskilled, at the hands of those clever at <span class="term">petteia</span>, are in the end shut in and have no move left to play, so these too are at last blocked and left with nothing to say — by this other <span class="term">petteia</span>, played not with counters (<span class="term">psēphoi</span>) but with words.</p>
+    </div>
+    <div class="commentary">Socrates' simile for an interlocutor argued into silence. What it fixes for us is the <em>shape of losing</em>: not the loss of material but being <strong>hemmed in until no legal move remains</strong> — the blockade win of <a href="#s3">§3</a>, attested at the root. (Note the cross-link to Pollux: the pieces are <i>psēphoi</i> here too.) Together with Polybius' Hamilcar simile below, this is the <strong>load-bearing</strong> attestation that immobilisation <em>is</em> the image of defeat.</div>
+  </div>
+
+  <div class="witness">
+    <div class="head"><span class="src">Plato, <i>Phaedrus</i> 274c–d</span><span class="gloss-cite">petteia among the arts, and distinct from dice</span></div>
+    <div class="body">
+      <p class="orig grc" lang="grc">…εὑρεῖν δὲ ἀριθμόν τε καὶ λογισμὸν καὶ γεωμετρίαν καὶ ἀστρονομίαν, ἔτι δὲ πεττείας τε καὶ κυβείας, καὶ δὴ καὶ γράμματα.</p>
+      <p class="trans">…and [the god Theuth] invented number and calculation and geometry and astronomy, and further <span class="term">petteia</span> and dice (<span class="term">kybeia</span>), and, above all, letters.</p>
+    </div>
+    <div class="commentary">Two things: petteia is filed with the reckoning-arts (a game of calculation, not chance), and it is named <strong>separately from dice</strong> — warrant for keeping our game clear of the race-and-dice "five-lines" with which popular accounts conflate it (<a href="#s1a">§1A</a> caution).</div>
+  </div>
+
+  <div class="witness">
+    <div class="head"><span class="src">Aristotle, <i>Politics</i> 1253a</span><span class="gloss-cite">isolation is vulnerability</span></div>
+    <div class="body">
+      <p class="orig grc" lang="grc">…ἅμα γὰρ φύσει τοιοῦτος καὶ πολέμου ἐπιθυμητής, ἅτε περ ἄζυξ ὢν ὥσπερ ἐν πεττοῖς.</p>
+      <p class="trans">…for such a man [the cityless one] is by nature also a lover of war, inasmuch as he is unpaired, like an isolated piece in <span class="term">petteia</span>.</p>
+    </div>
+    <div class="commentary">The decisive word is <strong><span lang="grc">ἄζυξ</span></strong> — "unyoked, unpaired." A piece without a partner is exposed; mutual support is strength. This is the custodial logic stated as political metaphor: a lone stone is a captured stone waiting to happen.</div>
+  </div>
+
+  <div class="witness">
+    <div class="head"><span class="src">Polybius, <i>Histories</i> 1.84.7–8 (on Hamilcar Barca)</span><span class="gloss-cite">victory modelled on the game</span></div>
+    <div class="body">
+      <p class="trans">…like a good <span class="term">petteia</span>-player, hemming them in and cutting them off, he destroyed great numbers of the enemy without a battle.</p>
+    </div>
+    <div class="commentary">In the Mercenary (Truceless) War, Hamilcar traps the Libyan and mercenary force in waterless country and reduces it by manoeuvre. The simile runs the other way from Plato's: not the game illustrating life but a general's <strong>blockade strategy</strong> illustrated by expert <i>petteia</i> — encirclement and containment, <i>amachei</i> ("without a battle"), not annihilation, as what a strong player does. It is the cleanest ancient statement that the game is <em>won by hemming in</em>.</div>
+  </div>
+
+  <div class="note">
+    <span class="lab">Attribution — a correction worth flagging</span>
+    This simile is very widely quoted online as <strong>Polybius on Scipio Aemilianus</strong>. That is wrong: the passage is <strong>Polybius 1.84</strong>, and its subject is <strong>Hamilcar Barca</strong> in the Mercenary War of 241–238 BCE. The slip is easy to see — Scipio's later blockade of Numantia is the more famous "win-by-siege," so the simile drifted onto him — but Polybius applies it to Hamilcar. A small case study in this project's own rule: verify the locus, don't trust the repetition.
+  </div>
+
+  <div class="witness">
+    <div class="head"><span class="src">Pollux, <i>Onomasticon</i> IX.98</span><span class="gloss-cite">the keystone · Greek set from Dindorf's edition, Leipzig 1824</span></div>
+    <div class="body">
+      <p class="orig grc" lang="grc">Ἡ δὲ διὰ πολλῶν ψήφων παιδιὰ πλινθίον ἐστὶ, χώρας ἐν γραμμαῖς ἔχον διακειμένας· καὶ τὸ μὲν πλινθίον καλεῖται πόλις· τῶν δὲ ψήφων ἑκάστη, κύων· διῃρημένων δὲ εἰς δύο τῶν ψήφων κατὰ τὰς χρόας, ἡ τέχνη τῆς παιδιᾶς ἔστι περιλήψει τῶν δύο ψήφων ὁμοχρόων τὴν ἑτερόχρουν ἀναιρεῖν.</p>
+      <p class="trans">The game played with many counters (<span class="term">psēphoi</span>) is a <span class="term">plinthion</span> — a tiled block having its spaces set out among lines. The block is called the <span class="term">polis</span> (city), and each of the counters a "dog" (<span class="term">kyon</span>). The counters being divided into two by colour, the art of the game is, by the <strong>encirclement</strong> of two same-coloured counters, to remove the one of the other colour.</p>
+    </div>
+    <div class="commentary">Four rules in one sentence: a <strong>lined grid</strong> called the <i>polis</i>; pieces called <strong>dogs</strong>; <strong>two colours</strong>; and <strong>capture by encircling a piece between two of one's own</strong>. Everything structural in <a href="#s3">§3</a> that is graded <span class="tag">A</span> rests here — and the verb is exact: <i>perilēpsei… anairein</i>, "to remove by encirclement," the custodial rule named outright. The same passage twice supports our cautions: it calls the <i>pessoi</i> plain <i>psēphoi</i> (counters, no hierarchy), and immediately <em>before</em> it Pollux sets out a <strong>different</strong> game, "five-lines," with its "sacred line" and the proverb <i>kinei ton aph' hieras</i> ("move the piece from the sacred line") — the textual basis for refusing to conflate the two. Pollux then quotes Cratinus punning on <i>kyna kai polin</i> ("dog and city"), proof the terminology was proverbial.</div>
+  </div>
+
+  <h4>The Roman reception</h4>
+
+  <div class="witness">
+    <div class="head"><span class="src">Ovid, <i>Ars Amatoria</i> III.357–358</span><span class="gloss-cite">custodial capture, Latin side</span></div>
+    <div class="body">
+      <p class="orig lat">Cautaque non stulte latronum proelia ludat, / unus cum gemino calculus hoste perit.</p>
+      <p class="trans">And let her play, shrewdly and not foolishly, the battles of the brigand-pieces (<span class="term">latrones</span>) — where a single piece (<span class="term">calculus</span>) is lost when caught between a pair of foes.</p>
+    </div>
+    <div class="commentary">Independent Latin confirmation of Pollux's enclosure rule: <strong>one piece dies between two enemies</strong> (<i>gemino… hoste</i>). The pieces are <i>latrones</i>, the soldier-name that gives <i>latrunculi</i>.</div>
+  </div>
+
+  <div class="witness">
+    <div class="head"><span class="src">Ovid, <i>Tristia</i> II.477–478</span><span class="gloss-cite">capture, and a moving line</span></div>
+    <div class="body">
+      <p class="orig lat">Discolor ut recto grassetur limite miles, / cum medius gemino calculus hoste perit.</p>
+      <p class="trans">…how the piece of opposing colour advances along a straight line, when the piece caught in the middle perishes between two foes.</p>
+    </div>
+    <div class="commentary">The same capture couplet Ovid liked enough to reuse — but here prefaced by <strong>recto… limite</strong>, movement "along a straight line." A modest Latin foothold for ranged, orthogonal motion (the slide of <a href="#s3">§3</a>) alongside the enclosure rule.</div>
+  </div>
+
+  <div class="witness">
+    <div class="head"><span class="src">Martial, <i>Epigrams</i> XIV.17 (<i>Calculi</i>)</span><span class="gloss-cite">two colours in opposition</span></div>
+    <div class="body">
+      <p class="orig lat">Insidiosorum si ludis bella latronum, / gemmeus iste tibi miles et hostis erit.</p>
+      <p class="trans">If you play the treacherous wars of the brigand-pieces, this glass man will be for you both soldier and foe.</p>
+    </div>
+    <div class="commentary">A gift-tag couplet for a set of gaming-stones: <strong>two-coloured pieces</strong> (<i>miles et hostis</i>, your man and your enemy, told apart only by colour), made of glass — corroborating the uniform two-colour counters of the archaeology.</div>
+  </div>
+
+  <div class="witness">
+    <div class="head"><span class="src">Laus Pisonis 184–202</span><span class="gloss-cite">the richest gameplay source either tradition has · Latin set from Duff &amp; Duff, <i>Minor Latin Poets</i> (Loeb); conventionally cited 190–208</span></div>
+    <div class="body">
+      <p class="orig lat">te si forte iuvat studiorum pondere fessum / non languere tamen lususque movere per artem, / callidiore modo tabula variatur aperta / calculus et vitreo peraguntur milite bella, / ut niveus nigros, nunc et niger alliget albos. / sed tibi quis non terga dedit? quis te duce cessit / calculus? aut quis non periturus perdidit hostem? / mille modis acies tua dimicat: ille petentem, / dum fugit, ipse rapit; longo venit ille recessu, / qui stetit in speculis; hic se committere rixae / audet et in praedam venientem decipit hostem; / ancipites subit ille moras similisque ligato / obligat ipse duos; hic ad maiora movetur, / ut citus ecfracta prorumpat in agmina mandra / clausaque deiecto populetur moenia vallo. / interea sectis quamvis acerrima surgant / proelia militibus, plena tamen ipse phalange / aut etiam pauco spoliata milite vincis, / et tibi captiva resonat manus utraque turba.</p>
+      <p class="trans">If perhaps, wearied by the weight of your studies, it pleases you all the same not to slacken but to set a game going by skill — in the more cunning way the open board is laid out with the piece (<span class="term">calculus</span>), and the war is fought through with a soldiery of glass, so that now the white binds in (<span class="term">alliget</span>) the black, now the black the white. Yet who has not turned his back to you? what piece, with you as commander, has given way? who, doomed himself, has not [first] destroyed his enemy? Your line fights in a thousand ways: one, while it flees the attacker, itself seizes him; another comes from a long retreat, having stood watch on the heights; this one dares to throw himself into the brawl and cheats the enemy as he advances onto the prey; that one undergoes wavering delays and, like a piece blockaded (<span class="term">ligato</span>), himself blockades (<span class="term">obligat</span>) two; another moves to greater things, so that, the barrier (<span class="term">mandra</span>) broken open, he may burst swiftly into the ranks and, the rampart cast down, lay waste the enclosed walls. Meanwhile, however fierce the battles that rise as the ranks are cut to pieces, you win still with your phalanx full — or stripped of only a few soldiers — and in both your hands the throng of captives rattles.</p>
+    </div>
+    <div class="commentary">
+      <p>This single passage <em>fills the two Greek gaps</em> (<a href="#s4">§4</a>) and corroborates a third theme:</p>
+      <ul>
+        <li><strong>Open-board placement.</strong> <i>tabula… aperta</i>, the board "laid out open," with pieces "varied" cleverly across it — the warrant for our <strong>placement</strong> opening (<a href="#s3">§3</a>) over a fixed opposed-rows array.</li>
+        <li><strong>Line-breaking slide.</strong> <i>ut citus ecfracta… prorumpat in agmina mandra</i> — "the barrier broken, he bursts swiftly into the ranks." The clearest ancient image of <strong>ranged, breakthrough movement</strong> (<a href="#s3">§3</a>) — our basis, with Ovid's <i>recto limite</i>, for slide over single-step.</li>
+        <li><strong>The blockade theme, in Latin and explicit.</strong> The verbs are <i>alliget</i>, <i>ligato</i>, <i>obligat</i> — "binds in," "blockaded," "blockades." The whole register is immobilisation: pieces <em>tying down</em> other pieces (<i>obligat ipse duos</i>, "himself blockades two"). This is the Roman side of Plato's "shut in" — and it sits beside <i>plena phalange… vincis</i>, winning with one's force <strong>intact</strong> (blockade, not annihilation). It is also the textual root of the contested <i>alligatus</i> / "freeing" reading (<a href="#s4">§4</a>): the binding vocabulary is real; what Seneca's metaphor adds to it is the interpretive step we decline to canonise.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="witness">
+    <div class="head"><span class="src">Isidore, <i>Etymologiae</i> XVIII.67</span><span class="gloss-cite">the immobilisation idiom, lexicalised · Latin set from Lindsay's <i>OCT</i>, tomus II, 1911</span></div>
+    <div class="body">
+      <p class="orig lat">Calculi partim ordine moventur, partim vage: ideo alios ordinarios, alios vagos appellant; at vero qui moveri omnino non possunt, incitos dicunt. Vnde et egentes homines inciti vocantur, quibus spes ultra procedendi nulla restat.</p>
+      <p class="trans">The counters (<span class="term">calculi</span>) move partly in order, partly at random; so they call some "regular" (<span class="term">ordinarii</span>), others "wandering" (<span class="term">vagi</span>); but those that cannot be moved at all they call "stuck" (<span class="term">inciti</span>). Whence even destitute men are called <span class="term">inciti</span> — men for whom no hope of advancing further remains.</p>
+    </div>
+    <div class="commentary">Late lexicography, but it pins three things the reconstruction uses. It records the Roman piece-vocabulary (<i>ordinarius</i>, <i>vagus</i>) the <a href="#s4">§4</a> variants draw on; and — the load-bearing point — it defines <strong><i>incitus</i></strong> as a piece that <em>cannot move at all</em> (<i>qui moveri omnino non possunt</i>), then carries the word straight into the metaphor of a person with <strong>no move and no hope left</strong>. That is <em>immobilisation = defeat</em> stated as plain idiom, and the root of the proverb <i>ad incitas redigere</i> ("to reduce to a standstill" = to beat utterly; the idiom itself is Plautine — <i>Poenulus</i> — and in Lucilius). This is the Latin tradition independently naming as its image-of-losing exactly what Plato's <span lang="grc">ἀποκλείονται</span> names in Greek.</div>
+  </div>
+
+  <h4>Further witnesses — corroborating the keystone</h4>
+  <p class="sectlede">Pollux IX.98 is the keystone, but it is not alone. Three later or lexicographic witnesses independently confirm the two things most of the reconstruction hangs on — that the board is a <i>polis</i> and the pieces are "dogs," and that our game is one of placement and position, not of dice. They are paraphrased here with their references.</p>
+
+  <div class="witness paraphrase">
+    <div class="head"><span class="src">Eustathius of Thessalonica, <i>Commentary on the Iliad</i> (on Il. Ψ.88)</span><span class="gloss-cite"><i>polis</i> and "dogs," from a second hand</span></div>
+    <div class="body">
+      <p class="orig">…the spaces of the board are called <span class="term">poleis</span> (cities) by the rule of the game, and the pieces that scheme against one another are called "dogs" (<span class="term">kynes</span>).</p>
+    </div>
+    <div class="commentary">A twelfth-century scholar, reading Homer, reaches independently for the same two technical terms Pollux gives — <i>polis</i> for the board, <i>kynes</i> for the pieces. Late, but it shows the vocabulary was not a one-off in Pollux: it was the standard way of naming this game.</div>
+  </div>
+
+  <div class="witness paraphrase">
+    <div class="head"><span class="src">Zenobius, <i>Epitome of Proverbs</i> 5.67 (<span lang="grc">πόλεις παίζειν</span>, "to play cities")</span><span class="gloss-cite">the game-name, with a comic source</span></div>
+    <div class="body">
+      <p class="orig">"To play cities" (<span class="term">poleis paizein</span>): Cratinus recalls it in the <i>Drapetides</i>. The <span class="term">polis</span> is a kind of pessoi-game…</p>
+    </div>
+    <div class="commentary">A proverb-collection independently records both the <strong>name of the game</strong> (playing <i>poleis</i>) and a fifth-century comic attestation (Cratinus). We already meet that Cratinus pun <em>inside</em> Pollux ("dog and city"); Zenobius confirms it from outside, and confirms that "playing cities" was a known idiom.</div>
+  </div>
+
+  <div class="witness paraphrase">
+    <div class="head"><span class="src">Hesychius of Alexandria, <i>Lexicon</i></span><span class="gloss-cite">petteia is not dice</span></div>
+    <div class="body">
+      <p class="orig">…petteia differs from <span class="term">kybeia</span> (dice-play)…</p>
+    </div>
+    <div class="commentary">The lexicographer draws the line our <a href="#s1a">§1A</a> caution depends on: <i>petteia</i> (the position-game) is a different thing from <i>kybeia</i> (dice). Backing, from a fourth witness, for not folding our game into the dice-and-race material — the same separation Pollux himself makes by treating "five-lines" apart (IX.97).</div>
+  </div>
+
+  <hr>
+
+  <!-- §2 -->
+  <h2 id="s2"><span class="num">§2</span>What the sources fix vs. leave open</h2>
+
+  <ol class="rules">
+    <li><strong>Board is a grid.</strong> <span class="tag">A</span> Pollux; Varro. Not in dispute.</li>
+    <li><strong>Capture = custodial enclosure.</strong> <span class="tag">A</span> The best-attested rule of all — Pollux, confirmed by Ovid and Martial. Bedrock.</li>
+    <li><strong>Two players, two colours, otherwise-identical pieces.</strong> <span class="tag">A</span> Pollux ("dogs… two colours"). A single named piece-type, <strong>no hierarchy</strong>.</li>
+    <li><strong>No special / leader piece.</strong> <span class="tag i">I</span> strong. <em>No Greek or Roman text mentions a second piece type.</em> The Dux rests entirely on the Stanway arrangement; we treat <strong>all pieces as equal</strong> (<a href="#s5">§5</a>).</li>
+    <li><strong>Victory by immobilisation / blockade.</strong> <span class="tag">A</span> Plato, Aristotle, Polybius make <em>cornering and being unable to move</em> the defining image. <strong>Foregrounded as the primary win.</strong> Material reduction is a <strong>secondary</strong> path <span class="tag i">I</span>, and a <strong>material tie-break</strong> decides a stalled game <span class="tag i">I</span>/<span class="tag d">D</span> — the plain sense of <i>ad incitas redigere</i>.</li>
+    <li id="s2-board"><strong>Board size.</strong> <span class="tag d">D</span> Open — no Greek dimension survives, and the Roman archaeology spreads across 7×7, 7×8, 8×8, 9×9, 9×10 with none privileged. <strong>7×7 default</strong> — equally attested, the squarest of the small boards (inside the computationally-supported 7×8–9×9 range, <a href="#s1b">§1B</a>), and deliberately neither the 8×8 chessboard nor a Go-sized grid, so the game reads as a thing of its own. Size remains tunable; a 9×9 <em>array</em> is first-player-skewed (<a href="#s6">§6</a>), and board size does not change the blockade outcome (<a href="#s6c">§6C</a>).</li>
+    <li><strong>Opening — placement.</strong> <span class="tag i">I</span> Nowhere stated in Greek. But the receiving tradition's richest source puts play on the <strong>open board</strong> (<i>Laus Pisonis</i>), the opposed-rows array is "a chess analogy for which there is no authority" (Wayte, <i>CR</i> 1892), and self-play makes placement the fairest, most varied opening. The Roman reception thus <em>fills a Greek gap</em>: <strong>open-board placement</strong>, captures suspended during it.</li>
+    <li><strong>Movement — slide.</strong> <span class="tag i">I</span> Nowhere stated. The reception again supplies it: the <i>Laus Pisonis</i>' "breaking the line" reads as ranged movement, and <strong>single-step movement is computationally degenerate</strong> (games never resolve; <a href="#s6">§6</a>) while slide gives a living game. <strong>Slide (rook-like).</strong></li>
+    <li><strong>No suicide.</strong> <span class="tag i">I</span> Capture is mover-initiated; moving <em>into</em> a pre-existing bracket is safe. Universal in the family and required to function.</li>
+    <li><strong>Multiple simultaneous capture.</strong> <span class="tag i">I</span> One move closing two brackets takes both. (Echoed by "itself checks two.")</li>
+    <li><strong>Corner capture.</strong> <span class="tag d">D</span> A corner piece taken by bracketing its two approaches. Near-inert in play (<a href="#s6">§6</a>); on by default, toggleable.</li>
+    <li><strong>No freeing in the canonical game.</strong> <span class="tag i">I</span> No Greek source supports a rescue mechanic. Freeing belongs, if anywhere, to the Roman reception (<a href="#s4">§4</a>) — and even there is weakly attested and demonstrably pacifying (<a href="#s6">§6</a>).</li>
+  </ol>
+
+  <hr>
+
+  <!-- §3 -->
+  <h2 id="s3"><span class="num">§3</span>The reconstruction — the rules</h2>
+  <p class="sectlede">This is the game published as <span lang="grc">Pessoi</span>. Below, the historical name <i>petteia / polis</i> marks the tradition; the rules are the playable core.</p>
+
+  <p><strong>Players</strong> 2. &nbsp;<strong>Board</strong> open square grid, <strong>7×7 default</strong>, size tunable <span class="tag d">D</span> (<a href="#s2-board">§2.6</a>). &nbsp;<strong>Pieces</strong> the "dogs" (<i>kynes</i>) — identical, two colours; player-agreed count, <strong>12 per side</strong> a clean default on 7×7, roughly half the city occupied <span class="tag d">D</span>.</p>
+
+  <div class="ruleblock">
+    <h4><span class="t">Opening — placement</span> <span class="tag i">I</span></h4>
+    <p>Starting from an empty board, players alternate placing one dog on any vacant cell until all are down. No captures during placement.</p>
+  </div>
+
+  <div class="ruleblock">
+    <h4><span class="t">Movement — slide</span> <span class="tag i">I</span></h4>
+    <p>A dog slides orthogonally any number of unobstructed cells (rook-like); it may not pass through or land on an occupied cell. Mobility is generous on purpose: <strong>blockade is the soul of the game</strong> and needs room to manoeuvre. <em>(Variant: single-step — but see <a href="#s6">§6</a>, where it is degenerate.)</em></p>
+  </div>
+
+  <div class="ruleblock">
+    <h4><span class="t">Capture — enclosure</span> <span class="tag">A</span></h4>
+    <p>After your move, an enemy dog flanked on two opposite orthogonal sides by your dogs is <strong>taken and removed immediately</strong>. The bracket must be <strong>closed by the move just made</strong>; a dog that moves <em>into</em> a pre-existing gap is <strong>safe</strong> (no suicide). One move may close several brackets; all such dogs fall. <em>(Corner capture on by default; toggleable.</em> <span class="tag d">D</span><em>)</em></p>
+  </div>
+
+  <div class="ruleblock">
+    <h4><span class="t">No immediate move-undo</span> <span class="tag d">D</span></h4>
+    <p>A dog may not return on the very next turn to the cell it just left (anti-shuffle).</p>
+  </div>
+
+  <div class="ruleblock">
+    <h4><span class="t">Victory</span> <span class="tag">A</span> primary; <span class="tag i">I</span>/<span class="tag d">D</span> secondary</h4>
+    <ol class="rules">
+      <li><strong>Blockade (primary).</strong> You win by leaving your opponent <strong>unable to make any legal move</strong> — the <em>cornering</em> of Plato, the <em>azux</em> of Aristotle, the blockade of Polybius.</li>
+      <li><strong>Annihilation (secondary).</strong> Reducing the opponent below the two dogs needed ever to capture is also a win.</li>
+      <li><strong>Material tie-break.</strong> If a turn cap is reached, the player with <strong>more dogs standing</strong> wins; equality alone is a draw — the plain reading of <i>ad incitas redigere</i>, and the rule that (in self-play) turns the austere game from two-thirds drawn to fully decisive without distorting fairness (<a href="#s6">§6</a>).</li>
+    </ol>
+  </div>
+
+  <div class="note fact">
+    <span class="lab">On "primary"</span>
+    Blockade is the <strong>attested</strong> victory and the thematic meaning of defeat — but the engine finds it almost never the way strong play actually <em>ends</em> (capture decides). "Primary" here marks what the sources foreground and what losing <em>means</em>, not the statistically dominant outcome; under competent play the <strong>material tie-break</strong> is the de-facto decider. This is editorial precision, not a retreat: the texts make immobilisation the image of defeat, never the common result. The full finding is <a href="#s6c">§6C</a>.
+  </div>
+
+  <hr>
+
+  <!-- §4 -->
+  <h2 id="s4"><span class="num">§4</span><i>Ludus Latrunculorum</i> as Roman reception</h2>
+  <p>We read the Roman game as the same game in Latin dress. The hypothesis is economical rather than documented (<a href="#s0">§0</a>), but it earns its keep three ways.</p>
+
+  <p><strong>It shares the entire canonical skeleton.</strong> Grid (Varro), equal two-colour pieces (Martial), custodial capture (Ovid) — point for point Pollux's game.</p>
+
+  <p><strong>It supplies the two rules the Greek record leaves open.</strong> This is the strongest reason to keep the Roman material close rather than discard it. The Greek sources fix the <em>concept</em> (board, pieces, capture, victory) but are silent on <strong>opening</strong> and <strong>movement</strong> — exactly the two open choices. The receiving tradition's richest source, the <i>Laus Pisonis</i>, answers both: play on the <strong>open board</strong> → placement; "breaking the line" → slide. The reception is not decoration; it is evidence for the canonical game's two underdetermined rules.</p>
+
+  <p><strong>It corroborates the victory condition.</strong> The Latin idiom <i>ad incitas redigere</i> — "reduced to immobility," i.e. beaten (Plautus, Lucilius; the terminology via Isidore) — independently confirms, from the Roman side, that <strong>immobilisation is defeat</strong>, the very thing Plato and Polybius make central.</p>
+
+  <p><strong>Roman-flavour variants</strong> (offered, not canonical): the military vocabulary (<i>latrones</i>, <i>ordinarii</i>, the <i>vagus</i> → <i>ordinarius</i> progression); and the <strong>freeing / <i>incitus</i></strong> mechanic — a bracketed piece frozen for a turn and removed next turn unless a flanker is itself trapped. We treat freeing as a <strong>possible Roman accretion only</strong>: it rests on Schädler's reading of a <em>Senecan metaphor</em> (not an explicit rule), it has no Greek warrant, and under skilled play it nearly abolishes combat (<a href="#s6">§6</a>). It is the most likely single point of genuine Roman <em>divergence</em> — and precisely the kind of differentiating accretion that, pushed further, becomes chess. We log it and leave it off by default.</p>
+
+  <p><strong>Honest caveat.</strong> Direct transmission is sparsely attested. A reader who weights embodied texture over parsimony could instead anchor in <i>Ludus</i> (for the <i>Laus Pisonis</i> and the archaeology) and treat petteia as ancestral background — equally coherent, but it trades drift-resistance for richness and demands permanent vigilance against the chess-pull. We have chosen parsimony and the drift-resistant core.</p>
+
+  <hr>
+
+  <!-- §5 -->
+  <h2 id="s5"><span class="num">§5</span>Where we break from the standard reconstructions</h2>
+  <ol class="rules">
+    <li><strong>No Dux / no leader piece</strong> (vs. <strong>Bell</strong>). The leader-piece has no text behind it; it enters through readings of the Stanway arrangement (Parlett floated it, Bell built it). Pollux's undifferentiated "dogs," the silence of every text, and the uniform physical pieces weigh against it; Schädler reads Stanway as plausibly a native British game. <strong>All pieces equal.</strong></li>
+    <li id="s5-blockade"><strong>Blockade restored as the primary victory</strong> (vs. <strong>Schädler / Murray</strong>, who centre reduction-to-one). Plato, Aristotle, and Polybius make immobilisation <em>the</em> image of defeat; we promote it, with material as secondary and a material tie-break. <em>(But "primary" is a claim about attestation and theme, not frequency: the engine shows blockade rarely decides a game even under strong play, and board geometry does not fix this — <a href="#s6c">§6C</a>. We foreground it as the source-attested victory and the meaning of defeat, while acknowledging the material tie-break does the practical work.)</em></li>
+    <li><strong>One game, not two — Latrunculi as reception</strong> (vs. the whole tradition of parallel Greek / Roman reconstructions). Stripped of accretions the two cannot be told apart; we name the Greek game canonical and the Roman game its reception (<a href="#s4">§4</a>).</li>
+    <li><strong>Slide movement</strong> (vs. Schädler's single-step), on the <i>Laus Pisonis</i>' "breaking the line," the 2024 computational results, and our own finding that single-step is degenerate.</li>
+    <li><strong>Placement, not opposed rows</strong> (vs. Murray's chess-style array), which has "no authority" (Wayte 1892) and plays worse than placement (<a href="#s6">§6</a>).</li>
+    <li><strong>Board honesty.</strong> The big rectangular boards (Colchester 8×12) are treated as <strong>probably a different game</strong>, following the computational stall-out, rather than stretched to fit.</li>
+  </ol>
+
+  <hr>
+
+  <!-- §6 -->
+  <h2 id="s6"><span class="num">§6</span>The tested program</h2>
+  <p>The design choices were not argued to a conclusion in prose but <strong>played to one</strong>: a custodial-capture engine with every rule as a flag, a unit-tested capture core (14 tests), an alpha-beta agent that defends and angles for blockade, confidence intervals over self-play, and a playable client. The canonical preset is the <a href="#s3">§3</a> game.</p>
+
+  <h3>What the engine found</h3>
+  <ul>
+    <li><strong>Single-step movement is degenerate</strong> — step games never resolve through play (they run to the cap, at every search depth and however the cap is scored), while slide resolves cleanly. The firmest result; it settles movement in favour of <strong>slide</strong>.</li>
+    <li><strong>Placement is fairest; the array is worst.</strong> A 9×9 <em>array</em> hands the first player ~80% of decided games and collapses opening variety; <strong>placement</strong> is the fairest and most varied opening.</li>
+    <li><strong>A material tie-break rescues the austere game</strong> — deciding a capped game by dogs-standing takes the blockade game from ~⅔ drawn to <strong>fully decisive while staying fair</strong>. Adopted.</li>
+    <li><strong>Freeing suppresses combat</strong> — under skilled play the <i>incitus</i> rule drops captures from ~18/game to ~0.7/game; a careful player won't risk a capture a counter-capture can undo. This is why freeing is a <em>Roman-reception variant only</em>, off by default.</li>
+    <li><strong>Corner-capture is near-inert</strong> — it rarely binds; settled on coherence, not consequence.</li>
+  </ul>
+
+  <p>The structured-decision rationale and per-rule confidence grades are kept in a companion essay, <i>Design Decisions &amp; Evidential Standing</i>.</p>
+
+  <h3 id="s6c">6C · The blockade verdict — an open editorial fork</h3>
+  <p class="sectlede">The program was rebuilt for speed (a bitboard engine, parity-verified against the reference on 2,304 games and exact on the evaluation) and extended to three independent agent architectures — a static heuristic, alpha-beta search at depths 2–3 under three evaluations (one written specifically to seek blockade), and an evaluation-free MCTS. This let us put the one question the rest of <a href="#s6">§6</a> left implicit: does <strong>blockade</strong>, which <a href="#s3">§3</a> foregrounds as the <em>primary</em> victory, actually decide games under competent play?</p>
+
+  <p><strong>The result is stark, and it is robust.</strong> Across all three architectures — and again once the placement opening is played competently rather than blindly — <strong>blockade decides essentially no games: zero, over several hundred decided games, with upper 95% confidence bounds of only a few percent.</strong> What decides them is capture — annihilation under sharp play, the material tie-break otherwise. The finding meets the agent-invariance bar this project set for itself (trust a result only when ≥2 architectures agree); here three do, including the eval-free architecture best suited to a siege.</p>
+
+  <p><strong>Why — and it is structural, not a weakness of the players.</strong> Blockade and capture pull against each other. To immobilise an enemy stone you must crowd its neighbours, but crowding it custodially tends to <em>capture</em> it (or spring a bracket) first; a true blockade requires keeping enemy stones alive <em>and</em> trapped, a delicate global plan no shallow search assembles and no rollout stumbles into. And the movement rule compounds it: <strong>slide</strong> movement gives a hemmed-in stone a long-range escape down any open file, so total immobilisation on an open board is extraordinarily hard. The irony is exact — slide was adopted <em>because</em> single-step is degenerate, yet slide is also what puts the canonical victory out of reach.</p>
+
+  <p><strong>This forces a choice the engine cannot make.</strong> It is set down here as an open editorial fork, not a settled revision:</p>
+
+  <div class="ruleblock">
+    <h4><span class="t">Response A — editorial precision</span></h4>
+    <p>Keep blockade as the victory the sources unambiguously attest — Plato's cornering, Polybius' Hamilcar, Aristotle's <i>azux</i> are not in doubt — but stop letting "primary" imply it is <em>how strong play wins</em>. State plainly that under competent play the <strong>material tie-break</strong> (already adopted in <a href="#s3">§3</a> for decisiveness) is the de-facto decider, with blockade the rarer, more elegant finish and the thematic image of defeat. This costs the headline that most sharply distinguished this reconstruction from Schädler / Murray (<a href="#s5-blockade">§5.2</a>) — but it is the more defensible reading, because what is graded <span class="tag">A</span> is that blockade is <em>a</em> decisive condition and <em>the</em> image of defeat, never that it is the statistically dominant outcome.</p>
+  </div>
+
+  <div class="ruleblock">
+    <h4><span class="t">Response B — revisit a design choice</span></h4>
+    <p>Treat the 0% as evidence a design choice mis-serves the attested goal, and change it. The prime suspect is <strong>slide movement</strong> — but reverting to step reintroduces the degeneracy <a href="#s6">§6</a> rejected, trading one pathology for another. The gentler lever is <strong>board size</strong>: blockade is markedly easier on smaller or edge-dense boards, several of which are archaeologically attested. The cost is honesty about motive — this would tune an open choice not toward the better-<em>playing</em> game but toward making an attested <em>ideal</em> also the common outcome, inverting the governing rule that playability chooses only <em>among</em> what the sources leave open (<a href="#s0">§0</a>).</p>
+  </div>
+
+  <p>The responses are not exclusive — one could adopt A in the prose now and flag board size as a live experiment. What the engine establishes is only the fact that forces the choice: <strong>as the canonical rules stand, the soul of the game and the way the game is won are not the same thing.</strong></p>
+
+  <div class="note fact">
+    <span class="lab">Postscript — the board-size lever, tested</span>
+    Response B's gentler option was then put to the engine: a blockade-seeking agent over boards from 5×5 to 9×9 at two densities. The result discourages it. No board at natural (~half-full) density produced <em>any</em> blockade; only small, <strong>unattested</strong> boards (5×5, 6×6) crowded to ~70% fill yielded a 3–7% rate, and the smallest <em>attested</em> board, 7×7, gave none even when crowded. Board geometry does not buy back blockade within the evidence — which leaves <strong>Response A</strong> as the resolution, and it is adopted in <a href="#s3">§3</a> and <a href="#s5-blockade">§5.2</a> above. (The same experiment did, separately, motivate moving the default board off the 8×8 chessboard to <strong>7×7</strong> — <a href="#s2-board">§2.6</a> — a distinctiveness gain, not a blockade fix. It also confirmed the instrument is sound: the engine <em>does</em> register blockades where the geometry permits them, so the 0% on the canonical board is a real property, not a blind spot.)
+  </div>
+
+  <hr>
+
+  <!-- §7 -->
+  <h2 id="s7"><span class="num">§7</span>Sources</h2>
+  <p class="sectlede">The key passages are quoted in the original and in fresh translation in <a href="#s1c">§1C</a>, "The witnesses in their own words."</p>
+
+  <p><strong>Greek (the canonical game).</strong> Homer, <i>Odyssey</i> 1.107 · Plato, <i>Republic</i> 487b–c; <i>Phaedrus</i> 274c–d · Aristotle, <i>Politics</i> 1253a · Polybius, <i>Histories</i> 1.84.7–8 (on Hamilcar Barca) · Pollux, <i>Onomasticon</i> IX.97–98 <em>(keystone)</em>.</p>
+
+  <p><strong>Roman (the reception).</strong> Varro, <i>De Lingua Latina</i> X.22 · Ovid, <i>Ars Amatoria</i> III.357–360; <i>Tristia</i> II.477 · Martial, <i>Epigrams</i> XIV.17 · <i>Laus Pisonis</i> 190–208 · Seneca (the <i>alligatus</i> metaphor) · Isidore, <i>Etymologiae</i> XVIII · Plautus, <i>Poenulus</i> 905 &amp; Lucilius (<i>ad incitas redigere</i>).</p>
+
+  <p><strong>Secondary (interpreters).</strong> Wayte, <i>Classical Review</i> VI (1892) · Austin, "Roman Board Games" (1934–35) · Murray, <i>A History of Board-Games Other Than Chess</i> (1952) · Bell, <i>Board and Table Games</i> · Schädler, <i>Latrunculi</i> (1994) &amp; "The Doctor's Game" (2007) · Parlett, <i>Oxford History of Board Games</i> (1999) · Crist, Piette, Soemers, Stephenson &amp; Browne (2024).</p>
+
+  <p style="margin-top:34px"><a class="backtotop" href="#">↑ Back to top</a> &nbsp;·&nbsp; <a class="backtotop" href="/play">Play Pessoi →</a></p>
+
+</article>
 </main>
+
+<footer>
+  <div class="wrap">
+    <span>Pessoi — <span class="mono">v0.3</span></span>
+    <span class="sep">·</span>
+    <a href="/play">Play</a>
+    <span class="sep">·</span>
+    <a href="/">Home</a>
+    <span class="sep">·</span>
+    <a href="https://games.wrootlabs.com">Wroot Labs Games</a>
+    <span class="sep">·</span>
+    <a href="https://playhoshi.com">Hoshi</a>
+    <span class="right" lang="grc">πεσσοί</span>
+  </div>
+</footer>
+
 </body>
 </html>
